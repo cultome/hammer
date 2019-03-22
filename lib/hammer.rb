@@ -9,4 +9,5 @@ module Hammer
 
   include Loader
   include Analyzer
+  include Structure
 end

@@ -18,7 +18,11 @@
 =end
 
 RSpec.describe Hammer::Structure::Vector do
-  it "initialize a vector with an array"
+  it "initialize a vector with an array" do
+    v = Vector.new(data: ["Carlos Estevez",35,"30-06-1985"])
+    expect(v.name).to eq "0"
+  end
+
   it "initialize a vector with a hash"
   it "initialize a vector with column name"
   it "initialize a vector with column type"
