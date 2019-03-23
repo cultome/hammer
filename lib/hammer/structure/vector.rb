@@ -4,6 +4,8 @@ module Hammer::Structure
   class Vector
     extend Forwardable
 
+    include Hammer::TypeCohersable
+
     attr_reader :name
     attr_reader :type
 

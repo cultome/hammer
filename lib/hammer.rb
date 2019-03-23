@@ -1,4 +1,6 @@
 require "hammer/version"
+require "hammer/type/missing"
+require "hammer/type_cohersion"
 require "hammer/loader"
 require "hammer/analyzer"
 require "hammer/structure"
