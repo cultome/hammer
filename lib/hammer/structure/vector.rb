@@ -1,11 +1,23 @@
+require "forwardable"
 
 module Hammer::Structure
   class Vector
-    attr_reader :name
+    extend Forwardable
 
-    def initialize(data: [], name: "0")
-      @data = data
+    attr_reader :name
+    attr_reader :type
+
+    def_delegators :@data, :size, :each
+
+    def initialize(data: [], name: "0", type: nil)
+      if type.nil?
+        @data = data
+      else
+        @data = data.map{|e| coherse(e, type) }
+      end
+
       @name = name
+      @type = type
     end
   end
 end
