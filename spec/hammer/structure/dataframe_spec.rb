@@ -1,11 +1,5 @@
 =begin
 df = Dataframe.new([
-  ["Carlos Estevez",35,"30-06-1985"],
-  ["Romero Alvarado",12,"02-10-1990"],
-  ["Saul Estevez",9,"01-03-2010"],
-  [Missing.new,10,"01-02-2003"],
-  ["Erin Raimer",Missing.new,"01-01-2019"],
-  ["Sacha Petricor",5,Missing.new],
 ], [
   "name",
   "age",
@@ -19,7 +13,47 @@ df = Dataframe.new([
 =end
 
 RSpec.describe Hammer::Structure::Dataframe do
-  it "initialize a dataframe with an array"
+  context "initialize a dataframe" do
+    context "with a multi-dimensional array" do
+      let(:d){
+        Dataframe.new(data: [
+          ["Carlos Estevez",35,"30-06-1985"],
+          ["Romero Alvarado",12,"02-10-1990"],
+          ["Saul Estevez",9,"01-03-2010"],
+          [Missing.new,10,"01-02-2003"],
+          ["Erin Raimer",Missing.new,"01-01-2019"],
+          ["Sacha Petricor",5,Missing.new],
+        ])
+      }
+
+      it "should report columns count" do
+        expect(d.columns.size).to eq 3
+      end
+
+      it "should report column types" do
+        expect(d.columns["0"][:types].to_a).to eq ["string", "missing"]
+        expect(d.columns["1"][:types].to_a).to eq ["int", "missing"]
+        expect(d.columns["2"][:types].to_a).to eq ["string", "missing"]
+      end
+
+      it "should get columns by name" do
+        expect(d.get("0")).to be_a Vector
+      end
+
+      it "should get correct columns values" do
+        expect(d.get("0").data).to eq [
+          "Carlos Estevez",
+          "Romero Alvarado",
+          "Saul Estevez",
+          Missing.new,
+          "Erin Raimer",
+          "Sacha Petricor",
+        ]
+      end
+    end
+  end
+
+  it "initialize a dataframe with an array of vectors"
   it "initialize a dataframe with a hash"
   it "initialize a dataframe with column names"
   it "initialize a dataframe with column types"

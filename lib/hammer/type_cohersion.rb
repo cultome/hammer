@@ -6,11 +6,29 @@ module Hammer::TypeCohersable
     type, args = dest_type.split(":")
     case type
     when "int"
-      return coherse_int(value, args)
+      coherse_int(value, args)
+    when "string"
+      coherse_string(value, args)
+    end
+  end
+
+  def translate_class_to_type(clazz)
+    if clazz == Integer
+      "int"
+    elsif clazz == String
+      "string"
+    elsif clazz == Missing
+      "missing"
+    else
+      raise "invalid column type #{clazz}"
     end
   end
 
   private
+
+  def coherse_string(value, args)
+    value.to_s
+  end
 
   def coherse_int(value, arg_exp)
     args = arg_exp&.split(",") || []

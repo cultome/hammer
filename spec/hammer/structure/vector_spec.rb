@@ -1,22 +1,3 @@
-=begin
-  ["Carlos Estevez",35,"30-06-1985"],
-  ["Romero Alvarado",12,"02-10-1990"],
-  ["Saul Estevez",9,"01-03-2010"],
-  [Missing.new,10,"01-02-2003"],
-  ["Erin Raimer",Missing.new,"01-01-2019"],
-  ["Sacha Petricor",5,Missing.new],
-], [
-  "name",
-  "age",
-  "birthday",
-],
-[
-  String,
-  Integer,
-  Date,
-])
-=end
-
 RSpec.describe Hammer::Structure::Vector do
   context "initialize a vector" do
     context "with a data array only" do
@@ -46,16 +27,30 @@ RSpec.describe Hammer::Structure::Vector do
         v.each{|e| expect([Integer, Missing]).to include(e.class) }
       end
     end
+  end
 
-    it "initialize a vector with column type"
-    it "initialize a vector with row name"
+  it "initialize a vector with column type"
+  it "initialize a vector with row name"
 
-    it "selects a slice of rows by name"
-    it "selects a slice of rows by index"
+  it "selects a slice of rows by name"
+  it "selects a slice of rows by index"
 
-    it "deletes a row by name"
-    it "deletes a row by index"
+  it "deletes a row by name"
+  it "deletes a row by index"
 
-    it "sums two vectors"
+  it "sums two vectors"
+
+  context "with a valid vector" do
+    let(:v){ Vector.new(data: [1,"2"], name: "mixed", type: "int") }
+
+    it "appends a value to the data" do
+      v.push(data: "value", type: "string")
+      expect(v.data).to eq [1,2,"value"]
+    end
+
+    it "appends a type to the vector metadata" do
+      v.push(data: "value", type: "string")
+      expect(v.types).to eq Set.new(["int", "string"])
+    end
   end
 end
