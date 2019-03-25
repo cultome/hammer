@@ -15,6 +15,10 @@ RSpec.describe Hammer::TypeCohersable do
       expect(translate_class_to_type(Missing)).to eq "missing"
     end
 
+    it "translate a Date"
+    it "translate a Datetime"
+    it "translate a Time"
+
     it "translate a not supported class" do
       expect{translate_class_to_type(Set)}.to raise_error "invalid column type Set"
     end
@@ -54,6 +58,6 @@ RSpec.describe Hammer::TypeCohersable do
     end
   end
 
-  it "detect the more general type"
+  it "#more_general_type"
+  it "#detect_type_and_cast"
 end
-

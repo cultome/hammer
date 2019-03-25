@@ -1,3 +1,4 @@
+require "date"
 
 module Hammer::TypeCohersable
   def coherse(value, dest_type)
@@ -10,12 +11,20 @@ module Hammer::TypeCohersable
       coherse_int(value, args)
     when "string"
       coherse_string(value, args)
+    when "date"
+      coherse_date(value, args)
+    when "float"
+      raise "implement cast to float"
+    when "time"
+      raise "implement cast to time"
     end
   end
 
   def translate_class_to_type(clazz)
     if clazz == Integer
       "int"
+    elsif clazz == Date
+      "date"
     elsif clazz == String
       "string"
     elsif clazz == Missing || clazz == NilClass
@@ -38,13 +47,36 @@ module Hammer::TypeCohersable
     types.min{|a,b| ordered_types.index(a) <=> ordered_types.index(b)}
   end
 
+  def detect_type_and_cast(value)
+    return value unless value.is_a? String
+
+    type = case value
+           when /^[\d]+$/ then "int"
+           when /^[\d]+.[\d]+$/ then "float"
+           when /^[\d]{2}(.)[\d]{2}(.)[\d]{4}$/ then "date:%d#{$1}%m#{$2}%Y"
+           when /^[\d]{4}(.)[\d]{2}(.)[\d]{2}$/ then "date:%Y#{$1}%m#{$2}%d"
+           when /^[\d]{1,2}:[\d]{1,2}(:[\d]{1,2})?$/ then "time"
+           else "string"
+           end
+
+    coherse(value, type)
+  end
+
   private
+
+  def coherse_date(value, args)
+    return value if value.is_a? Date
+
+    Date.strptime(value, args)
+  end
 
   def coherse_string(value, args)
     value.to_s
   end
 
   def coherse_int(value, arg_exp)
+    return value if value.is_a? Integer
+
     args = arg_exp&.split(",") || []
 
     if args.delete("strict").nil?

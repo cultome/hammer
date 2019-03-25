@@ -1,6 +1,5 @@
 
 RSpec.describe Hammer::Loader::CSV do
-=begin
   context "loads a csv file" do
     let(:data){loads(:csv, filename: "spec/data/example_1.csv")}
 
@@ -20,5 +19,4 @@ RSpec.describe Hammer::Loader::CSV do
       expect(data.columns.values.map{|c| c[:name]}).to eq ["name", "age", "join"]
     end
   end
-=end
 end

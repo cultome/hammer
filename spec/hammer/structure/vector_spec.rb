@@ -49,10 +49,15 @@ RSpec.describe Hammer::Structure::Vector do
       expect(v.data.size).to eq 3
     end
 
-    it "detects a more general type and convert the whole vector type" do
+    it "detects a more general type" do
       v.push(value: "value", value_type: "string")
 
       expect(v.type).to eq "string"
+    end
+
+    it "convert the whole vector to the more general type" do
+      v.push(value: "value", value_type: "string")
+
       expect(v.data).to eq ["1","2","value"]
     end
   end
