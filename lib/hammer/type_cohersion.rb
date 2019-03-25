@@ -2,6 +2,7 @@
 module Hammer::TypeCohersable
   def coherse(value, dest_type)
     return value if value.is_a? Missing
+    return Missing.new if value.nil?
 
     type, args = dest_type.split(":")
     case type
@@ -17,11 +18,24 @@ module Hammer::TypeCohersable
       "int"
     elsif clazz == String
       "string"
-    elsif clazz == Missing
+    elsif clazz == Missing || clazz == NilClass
       "missing"
     else
       raise "invalid column type #{clazz}"
     end
+  end
+
+  def more_general_type(types)
+    ordered_types = [
+      "string",
+      "float",
+      "int",
+      "date",
+
+      "missing",
+    ]
+
+    types.min{|a,b| ordered_types.index(a) <=> ordered_types.index(b)}
   end
 
   private

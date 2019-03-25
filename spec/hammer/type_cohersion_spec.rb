@@ -45,5 +45,15 @@ RSpec.describe Hammer::TypeCohersable do
       expect(coherse(1.5, "string")).to eq "1.5"
     end
   end
+
+  context "coherse a nil" do
+    it "any value should return missing" do
+      expect(coherse(nil, "string")).to eq Missing.new
+      expect(coherse(nil, "int")).to eq Missing.new
+      expect(coherse(nil, "int:strict")).to eq Missing.new
+    end
+  end
+
+  it "detect the more general type"
 end
 

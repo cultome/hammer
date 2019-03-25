@@ -9,25 +9,33 @@ module Hammer::Structure
 
     attr_reader :data
     attr_reader :name
-    attr_reader :types
+    attr_reader :type
 
     def_delegators :@data, :size, :each
 
     def initialize(data: [], name: "0", type: nil)
       if type.nil?
         @data = data
-        @types = data.each_with_object(Set.new){|val,acc| acc.add(translate_class_to_type(val.class))}
+
+        types = data.each_with_object(Set.new){|val,acc| acc.add(translate_class_to_type(val.class))}
+        @type = more_general_type(types)
       else
         @data = data.map{|e| coherse(e, type) }
-        @types = Set.new([type])
+
+        @type = type
       end
 
       @name = name
     end
 
-    def push(data:, type:)
-      @data.push(coherse(data, type))
-      @types.add(type)
+    def push(value:, value_type:)
+      data.push(coherse(value, value_type))
+
+      new_type = more_general_type([value_type, type])
+      if new_type != type
+        @type = new_type
+        @data = data.map{|v| coherse(v, new_type)}
+      end
     end
   end # class Vector
 end

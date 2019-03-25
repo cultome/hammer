@@ -44,13 +44,16 @@ RSpec.describe Hammer::Structure::Vector do
     let(:v){ Vector.new(data: [1,"2"], name: "mixed", type: "int") }
 
     it "appends a value to the data" do
-      v.push(data: "value", type: "string")
-      expect(v.data).to eq [1,2,"value"]
+      v.push(value: "value", value_type: "string")
+
+      expect(v.data.size).to eq 3
     end
 
-    it "appends a type to the vector metadata" do
-      v.push(data: "value", type: "string")
-      expect(v.types).to eq Set.new(["int", "string"])
+    it "detects a more general type and convert the whole vector type" do
+      v.push(value: "value", value_type: "string")
+
+      expect(v.type).to eq "string"
+      expect(v.data).to eq ["1","2","value"]
     end
   end
 end
