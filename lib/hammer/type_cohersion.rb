@@ -2,8 +2,7 @@ require "date"
 
 module Hammer::TypeCohersable
   def coherse(value, dest_type)
-    return value if value.is_a? Missing
-    return Missing.new if value.nil?
+    return Missing.new if value.nil? || value.is_a?(Missing)
 
     type, args = dest_type.split(":")
     case type
@@ -40,26 +39,23 @@ module Hammer::TypeCohersable
       "float",
       "int",
       "date",
-
       "missing",
     ]
 
     types.min{|a,b| ordered_types.index(a) <=> ordered_types.index(b)}
   end
 
-  def detect_type_and_cast(value)
-    return value unless value.is_a? String
+  def detect_type(value)
+    return "missing" if value.nil?
 
-    type = case value
-           when /^[\d]+$/ then "int"
-           when /^[\d]+.[\d]+$/ then "float"
-           when /^[\d]{2}(.)[\d]{2}(.)[\d]{4}$/ then "date:%d#{$1}%m#{$2}%Y"
-           when /^[\d]{4}(.)[\d]{2}(.)[\d]{2}$/ then "date:%Y#{$1}%m#{$2}%d"
-           when /^[\d]{1,2}:[\d]{1,2}(:[\d]{1,2})?$/ then "time"
-           else "string"
-           end
-
-    coherse(value, type)
+    case value
+    when /^[\d]+$/ then "int"
+    when /^[\d]+.[\d]+$/ then "float"
+    when /^[\d]{2}(.)[\d]{2}(.)[\d]{4}$/ then "date:%d#{$1}%m#{$2}%Y"
+    when /^[\d]{4}(.)[\d]{2}(.)[\d]{2}$/ then "date:%Y#{$1}%m#{$2}%d"
+    when /^[\d]{1,2}:[\d]{1,2}(:[\d]{1,2})?$/ then "time"
+    else "string"
+    end
   end
 
   private

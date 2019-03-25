@@ -7,15 +7,21 @@ module Hammer::Loader
     def load_csv(filename)
       data = ::CSV.open(filename).readlines
 
-      # TODO handle the header
-      data.shift
-
+      headers = get_headers(data)
       formatted_data = apply_format(data)
 
-      Dataframe.new(data: formatted_data)
+      Dataframe.new(data: formatted_data, column_names: headers)
     end
 
     private
+
+    def get_headers(data)
+      header_types = data.first.map{|v| detect_type(v)}
+      first_row_types = data[1].map{|v| detect_type(v)}
+
+      return data.shift if header_types != first_row_types
+      nil
+    end
 
     def apply_format(data)
       data.map do |row|
@@ -25,7 +31,8 @@ module Hammer::Loader
 
     def apply_row_format(row)
       row.map do |value|
-        detect_type_and_cast(value)
+        type = detect_type(value)
+        coherse(value, type)
       end
     end
   end

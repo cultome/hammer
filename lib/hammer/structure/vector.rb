@@ -21,7 +21,6 @@ module Hammer::Structure
         @type = more_general_type(types)
       else
         @data = data.map{|e| coherse(e, type) }
-
         @type = type
       end
 
