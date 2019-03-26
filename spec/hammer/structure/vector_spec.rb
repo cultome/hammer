@@ -21,7 +21,7 @@ RSpec.describe Hammer::Structure::Vector do
     end
 
     context "with a data array, a name and a type" do
-      let(:v){ Vector.new(data: [1,"2",3.5,Missing.new,5], name: "my mixed col", type: "int") }
+      let(:v){ Vector.new(data: [1,"2",3.5,Missing.new,5], name: "my mixed col", type: "integer") }
 
       it "should convert item to the given type" do
         v.each{|e| expect([Integer, Missing]).to include(e.class) }
@@ -41,7 +41,7 @@ RSpec.describe Hammer::Structure::Vector do
   it "sums two vectors"
 
   context "with a valid vector" do
-    let(:v){ Vector.new(data: [1,"2"], name: "mixed", type: "int") }
+    let(:v){ Vector.new(data: [1,"2"], name: "mixed", type: "integer") }
 
     it "appends a value to the data" do
       v.push(value: "value", value_type: "string")

@@ -19,7 +19,7 @@ RSpec.describe Hammer::Structure::Dataframe do
 
       it "should report column type" do
         expect(d.columns["0"][:type]).to eq "string"
-        expect(d.columns["1"][:type]).to eq "int"
+        expect(d.columns["1"][:type]).to eq "integer"
         expect(d.columns["2"][:type]).to eq "string"
       end
 
