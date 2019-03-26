@@ -30,10 +30,6 @@ RSpec.describe Hammer::TypeCohersable do
     it "translate a Time" do
       expect(translate_class_to_type(Time)).to eq "time"
     end
-
-    it "translate a not supported class" do
-      expect{translate_class_to_type(Set)}.to raise_error "invalid column type Set"
-    end
   end
 
   context "coherse an integer" do

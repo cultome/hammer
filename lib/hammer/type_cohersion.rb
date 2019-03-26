@@ -1,46 +1,24 @@
 require "date"
 
 module Hammer::TypeCohersable
+
   def coherse(value, dest_type)
     return Missing.new if value.nil? || value.is_a?(Missing)
 
     type, args_exp = dest_type.split(":")
     args = args_exp&.split(",") || []
 
-    case type
-    when "integer"
-      coherse_int(value, args)
-    when "string"
-      coherse_string(value, args)
-    when "date"
-      coherse_date(value, args)
-    when "float"
-      coherse_float(value, args)
-    when "date_time"
-      coherse_datetime(value, args)
-    when "time"
-      coherse_time(value, args)
-    end
+    raise "unable to coherse type #{type}" unless respond_to?("coherse_#{type}", true)
+
+    send("coherse_#{type}", value, args)
   end
 
   def translate_class_to_type(clazz)
-    if clazz == Integer
-      "integer"
-    elsif clazz == Date
-      "date"
-    elsif clazz == String
-      "string"
-    elsif clazz == Float
-      "float"
-    elsif clazz == DateTime
-      "date_time"
-    elsif clazz == Time
-      "time"
-    elsif clazz == Missing || clazz == NilClass
-      "missing"
-    else
-      raise "invalid column type #{clazz}"
-    end
+    internal_type = clazz.to_s.gsub(/([a-z])([A-Z])/, '\1_\2').downcase
+
+    return "missing" if internal_type == "nil_class"
+
+    internal_type.split("::").last
   end
 
   def more_general_type(types)
@@ -86,7 +64,7 @@ module Hammer::TypeCohersable
     DateTime.strptime(value, args)
   end
 
-  def coherse_datetime(value, args)
+  def coherse_date_time(value, args)
     return value if value.is_a? DateTime
 
     DateTime.strptime(value, args)
@@ -96,13 +74,13 @@ module Hammer::TypeCohersable
     value.to_s
   end
 
-  def coherse_int(value, args)
+  def coherse_integer(value, args)
     return value if value.is_a? Integer
 
     if args.delete("strict").nil?
-      coherse_relaxed_int(value, args)
+      coherse_relaxed_integer(value, args)
     else
-      coherse_strict_int(value, args)
+      coherse_strict_integer(value, args)
     end
   end
 
@@ -112,11 +90,11 @@ module Hammer::TypeCohersable
     Float(value)
   end
 
-  def coherse_strict_int(value, args)
+  def coherse_strict_integer(value, args)
     Integer(value)
   end
 
-  def coherse_relaxed_int(value, args)
+  def coherse_relaxed_integer(value, args)
     value.to_i
   end
 end
