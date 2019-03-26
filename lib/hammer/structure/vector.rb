@@ -11,7 +11,7 @@ module Hammer::Structure
     attr_reader :name
     attr_reader :type
 
-    def_delegators :@data, :size, :each
+    def_delegators :@data, :size, :each, :[]
 
     def initialize(data: [], name: "0", type: nil)
       if type.nil?
@@ -24,7 +24,7 @@ module Hammer::Structure
         @type = type
       end
 
-      @name = name
+      @name = name.to_s
     end
 
     def push(value:, value_type:)
@@ -35,6 +35,10 @@ module Hammer::Structure
         @type = new_type
         @data = data.map{|v| coherse(v, new_type)}
       end
+    end
+
+    def fetch(*idxs)
+      data.filter.with_index{|v,idx| idxs.include?(idx) }
     end
   end # class Vector
 end

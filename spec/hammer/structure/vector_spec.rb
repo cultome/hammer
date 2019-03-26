@@ -24,21 +24,10 @@ RSpec.describe Hammer::Structure::Vector do
       let(:v){ Vector.new(data: [1,"2",3.5,Missing.new,5], name: "my mixed col", type: "integer") }
 
       it "should convert item to the given type" do
-        v.each{|e| expect([Integer, Missing]).to include(e.class) }
+        expect(v.type).to eq "integer"
       end
     end
   end
-
-  it "initialize a vector with column type"
-  it "initialize a vector with row name"
-
-  it "selects a slice of rows by name"
-  it "selects a slice of rows by index"
-
-  it "deletes a row by name"
-  it "deletes a row by index"
-
-  it "sums two vectors"
 
   context "with a valid vector" do
     let(:v){ Vector.new(data: [1,"2"], name: "mixed", type: "integer") }
@@ -60,5 +49,18 @@ RSpec.describe Hammer::Structure::Vector do
 
       expect(v.data).to eq ["1","2","value"]
     end
+
+    it "get a value by index" do
+      expect(v[1]).to eq 2
+    end
+
+    it "get multiple values by index" do
+      expect(v.fetch(0,1)).to eq [1,2]
+    end
+
+    it "deletes a row by name"
+    it "deletes a row by index"
+
+    it "sums two vectors"
   end
 end
