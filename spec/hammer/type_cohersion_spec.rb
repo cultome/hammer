@@ -66,6 +66,16 @@ RSpec.describe Hammer::TypeCohersable do
     end
   end
 
-  it "#more_general_type"
+  it "calculates the common denominator for a list of types" do
+    expect(more_general_type(["integer", "integer"])).to eq "integer"
+    expect(more_general_type(["missing", "missing"])).to eq "string"
+    expect(more_general_type(["missing", "date_time"])).to eq "date_time"
+    expect(more_general_type(["integer", "float"])).to eq "float"
+    expect(more_general_type(["time", "date"])).to eq "date_time"
+    expect(more_general_type(["date", "float"])).to eq "string"
+    expect(more_general_type(["date", "float", "missing"])).to eq "string"
+    expect(more_general_type(["integer", "float", "missing"])).to eq "float"
+  end
+
   it "#detect_type_and_cast"
 end

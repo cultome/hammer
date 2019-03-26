@@ -22,17 +22,32 @@ module Hammer::TypeCohersable
   end
 
   def more_general_type(types)
-    ordered_types = [
-      "string",
-      "float",
-      "integer",
-      "date",
-      "time",
-      "date_time",
-      "missing",
-    ]
+    types.reduce{|t1,t2| common_super_type(t1,t2)}
+  end
 
-    types.min{|a,b| ordered_types.index(a) <=> ordered_types.index(b)}
+  def common_super_type(t1, t2)
+    super_type, _ = [
+      ["string", ["missing", "string"]],
+      ["float", ["missing", "float"]],
+      ["integer", ["missing", "integer"]],
+      ["date_time", ["missing", "date_time"]],
+      ["date", ["missing", "date"]],
+      ["time", ["missing", "time"]],
+
+      ["float", ["integer", "float"]],
+
+      ["date_time", ["date", "time", "date_time"]],
+
+      ["string", ["float", "string"]],
+      ["string", ["integer", "string"]],
+      ["string", ["date_time", "string"]],
+      ["string", ["date", "string"]],
+      ["string", ["time", "string"]],
+    ].find do |(_, classes)|
+      classes.include?(t1) && classes.include?(t2)
+    end
+
+    super_type.nil? ? "string" : super_type
   end
 
   def detect_type(value)
