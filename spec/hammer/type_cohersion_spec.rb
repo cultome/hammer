@@ -77,5 +77,18 @@ RSpec.describe Hammer::TypeCohersable do
     expect(more_general_type(["integer", "float", "missing"])).to eq "float"
   end
 
-  it "#detect_type_and_cast"
+  it "detect value format" do
+    expect(detect_type("1234")).to eq "integer"
+    expect(detect_type("123.45")).to eq "float"
+    expect(detect_type("02-10-1990")).to eq "date:%d-%m-%Y"
+    expect(detect_type("1983/10/28")).to eq "date:%Y/%m/%d"
+    expect(detect_type("23:45")).to eq "time"
+    expect(detect_type("2010-03-01 12:59")).to eq "date_time:%Y-%m-%d %H:%M"
+    expect(detect_type("2010/03/01 12:59:30")).to eq "date_time:%Y/%m/%d %H:%M:%S"
+    expect(detect_type("01-03-2010T12:59")).to eq "date_time:%d-%m-%YT%H:%M"
+    expect(detect_type("01/03/2010T12:59:30")).to eq "date_time:%d/%m/%YT%H:%M:%S"
+    expect(detect_type("123something")).to eq "string"
+    expect(detect_type("")).to eq "missing"
+    expect(detect_type(nil)).to eq "missing"
+  end
 end
