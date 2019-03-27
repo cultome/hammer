@@ -40,17 +40,17 @@ RSpec.describe Hammer::TypeCohersable do
     it "a valid value" do
       expect(coherse("1", "integer")).to eq 1
       expect(coherse("1.5", "integer")).to eq 1
-      expect(coherse("1", "integer:strict")).to eq 1
+      expect(coherse("1", "integer|strict")).to eq 1
 
       expect(coherse(1, "integer")).to eq 1
       expect(coherse(1.5, "integer")).to eq 1
-      expect(coherse(1, "integer:strict")).to eq 1
-      expect(coherse(1.5, "integer:strict")).to eq 1
+      expect(coherse(1, "integer|strict")).to eq 1
+      expect(coherse(1.5, "integer|strict")).to eq 1
     end
 
     it "an invalid value" do
-      expect{coherse("1.5", "integer:strict")}.to raise_error ArgumentError
-      expect{coherse("a", "integer:strict")}.to raise_error ArgumentError
+      expect{coherse("1.5", "integer|strict")}.to raise_error ArgumentError
+      expect{coherse("a", "integer|strict")}.to raise_error ArgumentError
     end
   end
 
@@ -66,7 +66,7 @@ RSpec.describe Hammer::TypeCohersable do
     it "any value should return missing" do
       expect(coherse(nil, "string")).to eq missing
       expect(coherse(nil, "integer")).to eq missing
-      expect(coherse(nil, "integer:strict")).to eq missing
+      expect(coherse(nil, "integer|strict")).to eq missing
     end
   end
 
@@ -84,13 +84,13 @@ RSpec.describe Hammer::TypeCohersable do
   it "detect value format" do
     expect(detect_type("1234")).to eq "integer"
     expect(detect_type("123.45")).to eq "float"
-    expect(detect_type("02-10-1990")).to eq "date:%d-%m-%Y"
-    expect(detect_type("1983/10/28")).to eq "date:%Y/%m/%d"
+    expect(detect_type("02-10-1990")).to eq "date|%d-%m-%Y"
+    expect(detect_type("1983/10/28")).to eq "date|%Y/%m/%d"
     expect(detect_type("23:45")).to eq "time"
-    expect(detect_type("2010-03-01 12:59")).to eq "date_time:%Y-%m-%d %H:%M"
-    expect(detect_type("2010/03/01 12:59:30")).to eq "date_time:%Y/%m/%d %H:%M:%S"
-    expect(detect_type("01-03-2010T12:59")).to eq "date_time:%d-%m-%YT%H:%M"
-    expect(detect_type("01/03/2010T12:59:30")).to eq "date_time:%d/%m/%YT%H:%M:%S"
+    expect(detect_type("2010-03-01 12:59")).to eq "date_time|%Y-%m-%d %H:%M"
+    expect(detect_type("2010/03/01 12:59:30")).to eq "date_time|%Y/%m/%d %H:%M:%S"
+    expect(detect_type("01-03-2010T12:59")).to eq "date_time|%d-%m-%YT%H:%M"
+    expect(detect_type("01/03/2010T12:59:30")).to eq "date_time|%d/%m/%YT%H:%M:%S"
     expect(detect_type("123something")).to eq "string"
     expect(detect_type("")).to eq "missing"
     expect(detect_type(nil)).to eq "missing"
