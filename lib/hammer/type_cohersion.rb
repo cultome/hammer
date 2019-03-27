@@ -72,18 +72,24 @@ module Hammer::TypeCohersable
     return value if value.is_a? Date
 
     Date.strptime(value, args.first)
+  rescue
+    invalid
   end
 
   def coherse_time(value, args)
     return value if value.is_a? DateTime
 
     DateTime.strptime(value, args)
+  rescue
+    invalid
   end
 
   def coherse_date_time(value, args)
     return value if value.is_a? DateTime
 
     DateTime.strptime(value, args.first)
+  rescue
+    invalid
   end
 
   def coherse_string(value, args)

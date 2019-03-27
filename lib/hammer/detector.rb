@@ -14,6 +14,6 @@ module Hammer::Detector
   private
 
   def is_csv_format?(fragment)
-    fragment.start_with?(/[\w\d"']/) && fragment.count(",") > 5
+    fragment.start_with?(/[\w\d"']/) && fragment.count(",") > 1
   end
 end

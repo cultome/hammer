@@ -95,4 +95,6 @@ RSpec.describe Hammer::TypeCohersable do
     expect(detect_type("")).to eq "missing"
     expect(detect_type(nil)).to eq "missing"
   end
+
+  it "tries to coherese invalid values"
 end

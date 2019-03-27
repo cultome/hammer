@@ -1,5 +1,5 @@
 require "hammer/version"
-require "hammer/type/missing"
+require "hammer/type"
 require "hammer/type_cohersion"
 require "hammer/detector"
 require "hammer/loader"
