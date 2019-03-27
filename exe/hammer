@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require "thor"
+require "hammer"
+
+class HammerCLI < Thor
+  include Hammer
+
+  desc "inspect FILE", "Inspect a file and extract basic stats"
+  def inspect(file)
+    file_format = detect_format(file)
+    file_data = loads(file_format, filename: file)
+
+    puts "File format: #{file_format}"
+    puts "Number of records: #{file_data.size}"
+    puts "Properties: #{file_data.columns.values.map{|p| "\n  - #{p[:name]} (#{p[:type]})"}.join}"
+  end
+end
+
+HammerCLI.start(ARGV)

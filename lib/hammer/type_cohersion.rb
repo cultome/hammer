@@ -3,7 +3,7 @@ require "date"
 module Hammer::TypeCohersable
 
   def coherse(value, dest_type)
-    return Missing.new if value.nil? || value.is_a?(Missing)
+    return Hammer::Structure::Missing.new if value.nil? || value.is_a?(Hammer::Structure::Missing)
 
     type, args_exp = dest_type.split(":")
     args = args_exp&.split(",") || []

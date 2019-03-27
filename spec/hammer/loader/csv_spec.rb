@@ -12,11 +12,11 @@ RSpec.describe Hammer::Loader::CSV do
     end
 
     it "the dataframe has the correct column type" do
-      expect(data.columns.values.map{|c| c[:type]}).to eq ["string", "integer", "date"]
+      expect(data.columns.map{|c| c.type}).to eq ["string", "integer", "date"]
     end
 
     it "the dataframe has the correct column names" do
-      expect(data.columns.values.map{|c| c[:name]}).to eq ["name", "age", "join"]
+      expect(data.columns.map{|c| c.name}).to eq ["name", "age", "join"]
     end
   end
 end

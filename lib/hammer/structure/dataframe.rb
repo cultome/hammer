@@ -21,12 +21,6 @@ module Hammer::Structure
       end
     end
 
-    def columns
-      @vectors.each_with_object({}) do |(k,v),acc|
-        acc[k] = {name: k, type: v.type}
-      end
-    end
-
     def get(column_name)
       @vectors.fetch(column_name)
     end
@@ -37,6 +31,10 @@ module Hammer::Structure
       else
         @vectors.first.last.size
       end
+    end
+
+    def columns
+      @vectors.values
     end
 
     private

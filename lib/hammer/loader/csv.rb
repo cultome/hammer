@@ -10,7 +10,7 @@ module Hammer::Loader
       headers = get_headers(data)
       formatted_data = apply_format(data)
 
-      Dataframe.new(data: formatted_data, column_names: headers)
+      Hammer::Structure::Dataframe.new(data: formatted_data, column_names: headers)
     end
 
     private
