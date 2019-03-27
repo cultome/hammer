@@ -13,7 +13,7 @@ class HammerCLI < Thor
 
     puts "File format: #{file_format}"
     puts "Number of records: #{file_data.size}"
-    puts "Properties: #{file_data.columns.values.map{|p| "\n  - #{p[:name]} (#{p[:type]})"}.join}"
+    puts "Properties: #{file_data.columns.map{|p| "\n  - #{p.name} (#{p.type})"}.join}"
   end
 end
 

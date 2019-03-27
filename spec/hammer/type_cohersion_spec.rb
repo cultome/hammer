@@ -16,11 +16,15 @@ RSpec.describe Hammer::TypeCohersable do
     end
 
     it "translate a Missing" do
-      expect(translate_class_to_type(Missing)).to eq "missing"
+      expect(translate_class_to_type(missing.class)).to eq "missing"
+    end
+
+    it "translate a nil" do
+      expect(translate_class_to_type(NilClass)).to eq "missing"
     end
 
     it "translate a Date" do
-      expect(translate_class_to_type(Missing)).to eq "missing"
+      expect(translate_class_to_type(Date)).to eq "date"
     end
 
     it "translate a Datetime" do
@@ -60,9 +64,9 @@ RSpec.describe Hammer::TypeCohersable do
 
   context "coherse a nil" do
     it "any value should return missing" do
-      expect(coherse(nil, "string")).to eq Missing.new
-      expect(coherse(nil, "integer")).to eq Missing.new
-      expect(coherse(nil, "integer:strict")).to eq Missing.new
+      expect(coherse(nil, "string")).to eq missing
+      expect(coherse(nil, "integer")).to eq missing
+      expect(coherse(nil, "integer:strict")).to eq missing
     end
   end
 

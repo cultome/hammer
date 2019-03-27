@@ -1,9 +1,10 @@
 require "date"
 
 module Hammer::TypeCohersable
+  include Hammer::Type
 
   def coherse(value, dest_type)
-    return Hammer::Structure::Missing.new if value.nil? || value.is_a?(Hammer::Structure::Missing)
+    return missing if value.nil?
 
     type, args_exp = dest_type.split(":")
     args = args_exp&.split(",") || []

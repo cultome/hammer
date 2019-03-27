@@ -1,7 +1,7 @@
 RSpec.describe Hammer::Structure::Vector do
   context "initialize a vector" do
     context "with a data array only" do
-      let(:v){ Vector.new(data: [1,2,3,Missing.new,5]) }
+      let(:v){ Vector.new(data: [1,2,3,missing,5]) }
 
       it "should report correct size" do
         expect(v.size).to eq 5
@@ -13,7 +13,7 @@ RSpec.describe Hammer::Structure::Vector do
     end
 
     context "with a data array and a name" do
-      let(:v){ Vector.new(data: [1,2,3,Missing.new,5], name: "my column") }
+      let(:v){ Vector.new(data: [1,2,3,missing,5], name: "my column") }
 
       it "should read correct name" do
         expect(v.name).to eq "my column"
@@ -21,7 +21,7 @@ RSpec.describe Hammer::Structure::Vector do
     end
 
     context "with a data array, a name and a type" do
-      let(:v){ Vector.new(data: [1,"2",3.5,Missing.new,5], name: "my mixed col", type: "integer") }
+      let(:v){ Vector.new(data: [1,"2",3.5,missing,5], name: "my mixed col", type: "integer") }
 
       it "should convert item to the given type" do
         expect(v.type).to eq "integer"

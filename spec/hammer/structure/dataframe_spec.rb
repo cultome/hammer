@@ -7,9 +7,9 @@ RSpec.describe Hammer::Structure::Dataframe do
           ["Carlos Estevez",35,"30-06-1985"],
           ["Romero Alvarado",12,"02-10-1990"],
           ["Saul Estevez",9,"01-03-2010"],
-          [Missing.new,10,"01-02-2003"],
-          ["Erin Raimer",Missing.new,"01-01-2019"],
-          ["Sacha Petricor",5,Missing.new],
+          [missing,10,"01-02-2003"],
+          ["Erin Raimer",missing,"01-01-2019"],
+          ["Sacha Petricor",5,missing],
         ])
       }
 
@@ -32,7 +32,7 @@ RSpec.describe Hammer::Structure::Dataframe do
           "Carlos Estevez",
           "Romero Alvarado",
           "Saul Estevez",
-          Missing.new,
+          missing,
           "Erin Raimer",
           "Sacha Petricor",
         ]
@@ -46,9 +46,9 @@ RSpec.describe Hammer::Structure::Dataframe do
             ["Carlos Estevez",35,"30-06-1985"],
             ["Romero Alvarado",12,"02-10-1990"],
             ["Saul Estevez",9,"01-03-2010"],
-            [Missing.new,10,"01-02-2003"],
-            ["Erin Raimer",Missing.new,"01-01-2019"],
-            ["Sacha Petricor",5,Missing.new],
+            [missing,10,"01-02-2003"],
+            ["Erin Raimer",missing,"01-01-2019"],
+            ["Sacha Petricor",5,missing],
           ],
           column_names: [
             "name",
@@ -68,9 +68,9 @@ RSpec.describe Hammer::Structure::Dataframe do
             ["Carlos Estevez",35,"30-06-1985"],
             ["Romero Alvarado",12,"02-10-1990"],
             ["Saul Estevez",9,"01-03-2010"],
-            [Missing.new,10,"01-02-2003"],
-            ["Erin Raimer",Missing.new,"01-01-2019"],
-            ["Sacha Petricor",5,Missing.new],
+            [missing,10,"01-02-2003"],
+            ["Erin Raimer",missing,"01-01-2019"],
+            ["Sacha Petricor",5,missing],
           ],
           column_names: [
             "name",

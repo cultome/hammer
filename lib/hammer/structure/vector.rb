@@ -1,11 +1,13 @@
 require "forwardable"
 require "set"
+require "hammer/statisticable"
 
 module Hammer::Structure
   class Vector
     extend Forwardable
 
     include Hammer::TypeCohersable
+    include Hammer::Statisticable
 
     attr_reader :data
     attr_reader :name

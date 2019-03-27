@@ -1,7 +1,13 @@
-module Hammer::Structure
+module Hammer::Type
+  def missing
+    @@missing ||= Missing.new
+  end
+
+  private
+
   class Missing
-    def ==(obj)
-      obj.is_a? Missing
+    def nil?
+      true
     end
   end
 end
