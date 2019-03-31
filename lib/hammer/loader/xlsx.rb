@@ -13,6 +13,7 @@ module Hammer::Loader
       headers = get_xlsx_headers(worksheet)
       data, types = get_sheet_info(worksheet)
       metadata = {
+        available_sheets: workbook.sheets.map.with_index{|s,idx| "[#{idx}] #{s.name}"}.join(", "),
         sheet_name: worksheet.sheet_name,
       }
       Hammer::Structure::Dataframe.new(data: data, column_names: headers, column_types: types, metadata: metadata)

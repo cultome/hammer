@@ -37,7 +37,6 @@ class HammerCLI < Thor
 
     if options[:sample]
       puts "Content sample:"
-
       file_data.rows.take(5).each do |row|
         puts row.join(" | ")
       end
