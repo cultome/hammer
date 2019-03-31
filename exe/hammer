@@ -11,16 +11,17 @@ class HammerCLI < Thor
   include Hammer
 
   class_option :extras, type: :hash, default: {}
+  class_option :fullload, type: :boolean, default: false
 
   desc "inspect FILE", "Inspect a file and extract basic stats"
   option :stats, type: :boolean, default: false
   option :sample, type: :boolean, default: false
   def inspect(file)
-    file_format = detect_format(file, extras: options[:extras])
-    file_data = loads(file_format, filename: file, extras: options[:extras])
+    file_format = detect_format(file, extras: extras)
+    file_data = loads(file_format, filename: file, extras: extras)
 
     print_stat "File format", file_format
-    print_stat "Number of records", file_data.size
+    print_stat("Number of records", file_data.size) if extras.fetch("fullload", false)
     file_data.metadata.each{|k,v| print_stat(to_title(k), v)}
     print_stat "Properties", file_data.columns.map{|p| "\n  - #{p.name} (#{p.type.yellow})"}.join
 
@@ -52,8 +53,8 @@ class HammerCLI < Thor
 
   desc "template FILE TEMPLATE", "Process the template in the file"
   def template(file, template)
-    file_format = detect_format(file, extras: options[:extras])
-    file_data = loads(file_format, filename: file, extras: options[:extras])
+    file_format = detect_format(file, extras: extras)
+    file_data = loads(file_format, filename: file, extras: extras)
     tmpl = ERB.new template
 
     names = file_data.column_names.map(&:to_sym)
@@ -64,6 +65,10 @@ class HammerCLI < Thor
   end
 
   no_commands {
+    def extras
+      @extras ||= options[:extras].merge("fullload" => options[:fullload])
+    end
+
     def to_title(sym)
       sym
         .to_s

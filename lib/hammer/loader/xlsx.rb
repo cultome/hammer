@@ -11,7 +11,7 @@ module Hammer::Loader
       worksheet = workbook[options["worksheet_idx"].to_i]
 
       headers = get_xlsx_headers(worksheet)
-      data, types = get_sheet_info(worksheet)
+      data, types = get_sheet_info(worksheet, extras: options)
       metadata = {
         available_sheets: workbook.sheets.map.with_index{|s,idx| "[#{idx}] #{s.name}"}.join(", "),
         sheet_name: worksheet.sheet_name,
@@ -46,7 +46,9 @@ module Hammer::Loader
 
     def xlsx_extras_defaults
       {
-        "worksheet_idx" => 0
+        "worksheet_idx" => 0,
+        "fullload" => false,
+        "load_only" => 10,
       }
     end
 
@@ -54,13 +56,17 @@ module Hammer::Loader
       worksheet[0].cells.map{|col| col.value}
     end
 
-    def get_sheet_info(worksheet)
+    def get_sheet_info(worksheet, extras: {})
       idx = 1
       data = []
       calculator = RowTypeCalculator.new
 
       loop do
         break if worksheet[idx].nil?
+
+        unless extras.fetch("fullload", false)
+          break if idx >= extras.fetch("load_only", 10)
+        end
 
         row_data = worksheet[idx].cells.map{|col| col.value}
         row_types = row_data.map{|value| detect_type(value.to_s)}

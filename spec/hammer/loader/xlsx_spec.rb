@@ -1,7 +1,7 @@
 
 RSpec.describe Hammer::Loader::XLSX do
   context "loads a xlsx file" do
-    let(:data){loads(:xlsx, filename: "spec/data/example_1.xlsx")}
+    let(:data){loads(:xlsx, filename: "spec/data/example_1.xlsx", extras: {"fullload" => true})}
 
     it "returns a dataframe" do
       expect(data).to be_instance_of Dataframe
