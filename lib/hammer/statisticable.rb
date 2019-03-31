@@ -2,7 +2,8 @@
 module Hammer::Statisticable
   def stats
     case type
-    when "integer" then integer_stats
+    when "integer" then numeric_stats
+    when "float" then numeric_stats
     when "string" then string_stats
     when "date" then date_stats
     end
@@ -10,7 +11,7 @@ module Hammer::Statisticable
 
   private
 
-  def integer_stats
+  def numeric_stats
     hash = {
       count: Hash.new{|h,k| h[k] = 0},
       sum: 0,

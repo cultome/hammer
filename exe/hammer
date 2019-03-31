@@ -7,6 +7,7 @@ class HammerCLI < Thor
   include Hammer
 
   desc "inspect FILE", "Inspect a file and extract basic stats"
+  option :stats, type: :boolean, default: false
   def inspect(file)
     file_format = detect_format(file)
     file_data = loads(file_format, filename: file)
@@ -14,14 +15,17 @@ class HammerCLI < Thor
     puts "File format: #{file_format}"
     puts "Number of records: #{file_data.size}"
     puts "Properties: #{file_data.columns.map{|p| "\n  - #{p.name} (#{p.type})"}.join}"
-    puts "Stats:"
-    file_data.columns.each do |col|
-      stat = col.stats
 
-      unless stat.nil?
-        puts "  #{col.name} (#{col.type})"
-        stat.each do |(k,v)|
-          puts "    - #{k}: #{v}"
+    if options[:stats]
+      puts "Stats:"
+      file_data.columns.each do |col|
+        stat = col.stats
+
+        unless stat.nil?
+          puts "  #{col.name} (#{col.type})"
+          stat.each do |(k,v)|
+            puts "    - #{k}: #{v}"
+          end
         end
       end
     end
