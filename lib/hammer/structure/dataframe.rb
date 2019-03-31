@@ -4,7 +4,10 @@ module Hammer::Structure
   class Dataframe
     include Hammer::TypeCohersable
 
-    def initialize(data: [], column_names: nil, column_types: nil)
+    attr_reader :metadata
+
+    def initialize(data: [], column_names: nil, column_types: nil, metadata: {})
+      @metadata = metadata
       @vectors = {}
 
       data.each_with_index do |row,ridx|

@@ -87,6 +87,10 @@ RSpec.describe Hammer::Structure::Dataframe do
 
       it "should report correct column types"
     end
+
+    context "with metadata" do
+      it "stores and extract metadata"
+    end
   end # initialize a dataframe
 
   context "with a valid dataframe" do

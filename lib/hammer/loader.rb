@@ -5,10 +5,7 @@ module Hammer::Loader
   include CSV
   include XLSX
 
-  def loads(type, filename:)
-    case type
-    when :csv then load_csv(filename)
-    when :xlsx then load_xlsx(filename)
-    end
+  def loads(type, filename:, extras: {})
+    send("load_#{type}", filename, extras: extras)
   end
 end

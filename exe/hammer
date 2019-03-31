@@ -7,14 +7,17 @@ require "erb"
 class HammerCLI < Thor
   include Hammer
 
+  class_option :extras, type: :hash, default: {}
+
   desc "inspect FILE", "Inspect a file and extract basic stats"
   option :stats, type: :boolean, default: false
   def inspect(file)
-    file_format = detect_format(file)
-    file_data = loads(file_format, filename: file)
+    file_format = detect_format(file, extras: options[:extras])
+    file_data = loads(file_format, filename: file, extras: options[:extras])
 
     puts "File format: #{file_format}"
     puts "Number of records: #{file_data.size}"
+    file_data.metadata.each{|k,v| puts "#{to_title(k)}: #{v}"}
     puts "Properties: #{file_data.columns.map{|p| "\n  - #{p.name} (#{p.type})"}.join}"
 
     if options[:stats]
@@ -37,8 +40,8 @@ class HammerCLI < Thor
 
   desc "template FILE TEMPLATE", "Process the template in the file"
   def template(file, template)
-    file_format = detect_format(file)
-    file_data = loads(file_format, filename: file)
+    file_format = detect_format(file, extras: options[:extras])
+    file_data = loads(file_format, filename: file, extras: options[:extras])
     tmpl = ERB.new template
 
     names = file_data.column_names.map(&:to_sym)
@@ -47,6 +50,17 @@ class HammerCLI < Thor
       puts tmpl.result_with_hash(ctx)
     end
   end
+
+  no_commands {
+    def to_title(sym)
+      sym
+        .to_s
+        .downcase
+        .split("_")
+        .map{|w| "#{w[0].upcase}#{w[1..]}"}
+        .join(" ")
+    end
+  }
 end
 
 HammerCLI.start(ARGV)

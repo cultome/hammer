@@ -4,7 +4,7 @@ module Hammer::Loader
   module CSV
     include Hammer::TypeCohersable
 
-    def load_csv(filename)
+    def load_csv(filename, extras: {})
       data = ::CSV.open(filename).readlines
 
       headers = get_headers(data)

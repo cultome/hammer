@@ -1,6 +1,6 @@
 
 module Hammer::Detector
-  def detect_format(filename)
+  def detect_format(filename, extras: {})
     fragment = File.new(filename).read(100)
 
     detector_methods = private_methods.grep(/^is_(\w+?)_format\?$/)

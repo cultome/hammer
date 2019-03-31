@@ -4,13 +4,18 @@ module Hammer::Loader
   module XLSX
     include Hammer::TypeCohersable
 
-    def load_xlsx(filename)
+    def load_xlsx(filename, extras: {})
+      options = xlsx_extras_defaults.merge(extras)
+
       workbook = RubyXL::Parser.parse(filename)
-      worksheet = workbook[0]
+      worksheet = workbook[options["worksheet_idx"].to_i]
 
       headers = get_xlsx_headers(worksheet)
       data, types = get_sheet_info(worksheet)
-      Hammer::Structure::Dataframe.new(data: data, column_names: headers, column_types: types)
+      metadata = {
+        sheet_name: worksheet.sheet_name,
+      }
+      Hammer::Structure::Dataframe.new(data: data, column_names: headers, column_types: types, metadata: metadata)
     end
 
     class RowTypeCalculator
@@ -36,6 +41,12 @@ module Hammer::Loader
     end
 
     private
+
+    def xlsx_extras_defaults
+      {
+        "worksheet_idx" => 0
+      }
+    end
 
     def get_xlsx_headers(worksheet)
       worksheet[0].cells.map{|col| col.value}

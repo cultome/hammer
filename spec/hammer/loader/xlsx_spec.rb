@@ -18,5 +18,7 @@ RSpec.describe Hammer::Loader::XLSX do
     it "the dataframe has the correct column names" do
       expect(data.columns.map{|c| c.name}).to eq ["ID", "Latitud", "Longitud"]
     end
+
+    it "stores metadata in dataframe"
   end
 end
