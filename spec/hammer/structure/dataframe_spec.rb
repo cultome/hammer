@@ -90,6 +90,16 @@ RSpec.describe Hammer::Structure::Dataframe do
   end # initialize a dataframe
 
   context "with a valid dataframe" do
+    include Hammer::Loader
+
+    let(:d){ loads(:csv, filename: "spec/data/example_1.csv") }
+
+    it "iterates on rows" do
+      count = 0
+      d.rows.each{|row| count += 1 }
+      expect(count).to eq 6
+    end
+
     it "gets a dataframe with selected columns"
   end
 

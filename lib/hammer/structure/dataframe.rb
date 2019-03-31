@@ -37,6 +37,23 @@ module Hammer::Structure
       @vectors.values
     end
 
+    def column_names
+      @vectors.keys
+    end
+
+    def get_row(idx)
+      @vectors.values.map{|v| v[idx]}
+    end
+
+    def rows
+      Enumerator.new do |y|
+        0.upto(@vectors.values.first.size-1) do |idx|
+          row = get_row(idx)
+          y << row
+        end
+      end
+    end
+
     private
 
     def column_type(column_types, idx, value)

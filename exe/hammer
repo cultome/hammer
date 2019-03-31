@@ -33,6 +33,19 @@ class HammerCLI < Thor
     STDERR.puts "Error: #{e.message}"
     STDERR.puts e.backtrace.join("\n")
   end
+
+  desc "template FILE TEMPLATE", "Process the template in the file"
+  def template(file, template)
+    file_format = detect_format(file)
+    file_data = loads(file_format, filename: file)
+
+    names = file_data.column_names.map(&:to_sym)
+    file_data.rows.each do |row|
+      ctx = Hash[names.zip(row)]
+
+      puts (template % ctx)
+    end
+  end
 end
 
 HammerCLI.start(ARGV)
