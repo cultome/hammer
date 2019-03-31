@@ -11,6 +11,7 @@ class HammerCLI < Thor
 
   desc "inspect FILE", "Inspect a file and extract basic stats"
   option :stats, type: :boolean, default: false
+  option :sample, type: :boolean, default: false
   def inspect(file)
     file_format = detect_format(file, extras: options[:extras])
     file_data = loads(file_format, filename: file, extras: options[:extras])
@@ -31,6 +32,14 @@ class HammerCLI < Thor
             puts "    - #{k}: #{v}"
           end
         end
+      end
+    end
+
+    if options[:sample]
+      puts "Content sample:"
+
+      file_data.rows.take(5).each do |row|
+        puts row.join(" | ")
       end
     end
   rescue Exception => e
