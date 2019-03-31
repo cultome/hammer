@@ -17,5 +17,9 @@ module Hammer::Type
     def to_s
       "missing"
     end
+
+    def method_missing(mtd, *args)
+      nil
+    end
   end
 end
