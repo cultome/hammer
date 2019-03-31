@@ -4,3 +4,5 @@ source "https://rubygems.org"
 gemspec
 
 gem "pry", "~> 0.12.2"
+
+gem "rubyXL", "~> 3.4"

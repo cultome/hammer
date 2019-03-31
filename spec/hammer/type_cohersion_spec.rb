@@ -49,8 +49,8 @@ RSpec.describe Hammer::TypeCohersable do
     end
 
     it "an invalid value" do
-      expect{coherse("1.5", "integer|strict")}.to raise_error ArgumentError
-      expect{coherse("a", "integer|strict")}.to raise_error ArgumentError
+      expect(coherse("1.5", "integer|strict")).to eq invalid
+      expect(coherse("a", "integer|strict")).to eq invalid
     end
   end
 

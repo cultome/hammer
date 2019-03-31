@@ -12,6 +12,8 @@ module Hammer::TypeCohersable
     raise "unable to coherse type #{type}" unless respond_to?("coherse_#{type}", true)
 
     send("coherse_#{type}", value, args)
+  rescue Exception
+    return invalid
   end
 
   def translate_class_to_type(clazz)
@@ -52,11 +54,11 @@ module Hammer::TypeCohersable
   end
 
   def detect_type(value)
-    return "missing" if value.nil? || value.empty?
+    return "missing" if value.nil? || (value.respond_to?(:empty?) && value.empty?)
 
     case value
-    when /^[\d]+$/ then "integer"
-    when /^[\d]+\.[\d]+$/ then "float"
+    when /^-?[\d]+$/ then "integer"
+    when /^-?[\d]+\.[\d]+$/ then "float"
     when /^[\d]{2}(.)[\d]{2}(.)[\d]{4}$/ then "date|%d#{$1}%m#{$2}%Y"
     when /^[\d]{4}(.)[\d]{2}(.)[\d]{2}$/ then "date|%Y#{$1}%m#{$2}%d"
     when /^[\d]{1,2}:[\d]{1,2}(:[\d]{1,2})?$/ then "time"
