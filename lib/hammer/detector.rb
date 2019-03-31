@@ -16,4 +16,8 @@ module Hammer::Detector
   def is_csv_format?(fragment)
     fragment.start_with?(/[\w\d"']/) && fragment.count(",") > 1
   end
+
+  def is_xlsx_format?(fragment)
+    fragment.include?("[Content_Types].xml")
+  end
 end
