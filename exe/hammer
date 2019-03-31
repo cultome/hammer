@@ -3,6 +3,9 @@
 require "thor"
 require "hammer"
 require "erb"
+require "rainbow/refinement"
+
+using Rainbow
 
 class HammerCLI < Thor
   include Hammer
@@ -16,34 +19,35 @@ class HammerCLI < Thor
     file_format = detect_format(file, extras: options[:extras])
     file_data = loads(file_format, filename: file, extras: options[:extras])
 
-    puts "File format: #{file_format}"
-    puts "Number of records: #{file_data.size}"
-    file_data.metadata.each{|k,v| puts "#{to_title(k)}: #{v}"}
-    puts "Properties: #{file_data.columns.map{|p| "\n  - #{p.name} (#{p.type})"}.join}"
+    print_stat "File format", file_format
+    print_stat "Number of records", file_data.size
+    file_data.metadata.each{|k,v| print_stat(to_title(k), v)}
+    print_stat "Properties", file_data.columns.map{|p| "\n  - #{p.name} (#{p.type.yellow})"}.join
 
     if options[:stats]
-      puts "Stats:"
-      file_data.columns.each do |col|
+      stats = file_data.columns.each_with_object([]) do |col,acc|
         stat = col.stats
 
         unless stat.nil?
-          puts "  #{col.name} (#{col.type})"
+          acc << "  #{col.name} (#{col.type.yellow})"
           stat.each do |(k,v)|
-            puts "    - #{k}: #{v}"
+            acc << "    - #{k}: #{v.to_s.cyan}"
           end
         end
       end
+
+      print_stat "Stats", "\n" + stats.join("\n") unless stats.empty?
     end
 
     if options[:sample]
-      puts "Content sample:"
+      print_stat "Content sample"
       file_data.rows.take(5).each do |row|
-        puts row.join(" | ")
+        puts row.join(" | ".yellow)
       end
     end
   rescue Exception => e
-    STDERR.puts "Error: #{e.message}"
-    STDERR.puts e.backtrace.join("\n")
+    STDERR.puts "Error: #{e.message}".red
+    STDERR.puts e.backtrace.join("\n").red
   end
 
   desc "template FILE TEMPLATE", "Process the template in the file"
@@ -67,6 +71,10 @@ class HammerCLI < Thor
         .split("_")
         .map{|w| "#{w[0].upcase}#{w[1..]}"}
         .join(" ")
+    end
+
+    def print_stat(prop, value="")
+      puts "#{prop.red}: #{value.to_s}"
     end
   }
 end

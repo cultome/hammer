@@ -16,6 +16,7 @@ module Hammer::Loader
         available_sheets: workbook.sheets.map.with_index{|s,idx| "[#{idx}] #{s.name}"}.join(", "),
         sheet_name: worksheet.sheet_name,
       }
+
       Hammer::Structure::Dataframe.new(data: data, column_names: headers, column_types: types, metadata: metadata)
     end
 

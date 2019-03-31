@@ -6,3 +6,5 @@ gemspec
 gem "pry", "~> 0.12.2"
 
 gem "rubyXL", "~> 3.4"
+
+gem "rainbow", "~> 3.0"
