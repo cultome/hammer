@@ -1,4 +1,5 @@
 require "rubyXL"
+require "hammer/util/row_type_calculator"
 
 module Hammer::Loader
   module XLSX
@@ -10,36 +11,14 @@ module Hammer::Loader
       workbook = RubyXL::Parser.parse(filename)
       worksheet = workbook[options["worksheet_idx"].to_i]
 
-      headers = get_xlsx_headers(worksheet)
-      data, types = get_sheet_info(worksheet, extras: options)
+      headers = xlsx_headers(worksheet)
+      data, types = xlsx_content(worksheet, extras: options)
       metadata = {
         available_sheets: workbook.sheets.map.with_index{|s,idx| "[#{idx}] #{s.name}"}.join(", "),
         sheet_name: worksheet.sheet_name,
       }
 
       Hammer::Structure::Dataframe.new(data: data, column_names: headers, column_types: types, metadata: metadata)
-    end
-
-    class RowTypeCalculator
-      def initialize
-        @cols = []
-      end
-
-      def add(row_types)
-        init(row_types.size)
-
-        row_types.each_with_index do |type,idx|
-          @cols[idx][type] += 1
-        end
-      end
-
-      def detected_types
-        @cols.map{|col| col.max{|a,b| a[1] <=> b[1]}.first}
-      end
-
-      def init(col_count)
-        col_count.times{|idx| @cols[idx] ||= Hash.new{|h,k| h[k] = 0}}
-      end
     end
 
     private
@@ -52,14 +31,14 @@ module Hammer::Loader
       }
     end
 
-    def get_xlsx_headers(worksheet)
+    def xlsx_headers(worksheet)
       worksheet[0].cells.map{|col| col.value}
     end
 
-    def get_sheet_info(worksheet, extras: {})
+    def xlsx_content(worksheet, extras: {})
       idx = 1
       data = []
-      calculator = RowTypeCalculator.new
+      calculator = Hammer::Util::RowTypeCalculator.new
 
       loop do
         break if worksheet[idx].nil?
