@@ -43,6 +43,18 @@ class HammerCLI < Thor
     end
   end
 
+  desc "interactive", "Executes a interactive session"
+  option :file, type: :string
+  def interactive
+    require "pry"
+
+    unless options["file"].nil?
+      df, file_format = detect_and_load(options[:file])
+    end
+
+    Pry.start binding
+  end
+
   no_commands {
     def print_sample(dataframe)
       print_property "Content sample"

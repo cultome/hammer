@@ -1,6 +1,10 @@
 require "set"
 
 module Hammer::Structure
+  def build_dataframe(*args)
+    Dataframe.new(*args)
+  end
+
   class Dataframe
     include Hammer::TypeCohersable
 
@@ -24,8 +28,16 @@ module Hammer::Structure
       end
     end
 
-    def get(column_name)
+    def get_col(column_name)
       @vectors.fetch(column_name)
+    end
+
+    def get_row(idx)
+      @vectors.values.map{|v| v[idx]}
+    end
+
+    def [](idx)
+      get_row(idx)
     end
 
     def size
@@ -42,10 +54,6 @@ module Hammer::Structure
 
     def column_names
       @vectors.keys
-    end
-
-    def get_row(idx)
-      @vectors.values.map{|v| v[idx]}
     end
 
     def rows

@@ -18,17 +18,17 @@ RSpec.describe Hammer::Structure::Dataframe do
       end
 
       it "should report column type" do
-        expect(d.get("0").type).to eq "string"
-        expect(d.get("1").type).to eq "integer"
-        expect(d.get("2").type).to eq "string"
+        expect(d.get_col("0").type).to eq "string"
+        expect(d.get_col("1").type).to eq "integer"
+        expect(d.get_col("2").type).to eq "string"
       end
 
-      it "should get columns by name" do
-        expect(d.get("0")).to be_a Vector
+      it "should get_col columns by name" do
+        expect(d.get_col("0")).to be_a Vector
       end
 
-      it "should get correct columns values" do
-        expect(d.get("0").data).to eq [
+      it "should get_col correct columns values" do
+        expect(d.get_col("0").data).to eq [
           "Carlos Estevez",
           "Romero Alvarado",
           "Saul Estevez",

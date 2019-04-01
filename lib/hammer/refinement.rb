@@ -1,7 +1,7 @@
+include Hammer::Detector
+include Hammer::TypeCohersable
 
 module Hammer::Refinement
-  include Hammer::TypeCohersable
-
   refine Array do
     def coherse_values
       map do |value|

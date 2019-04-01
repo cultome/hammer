@@ -1,18 +1,17 @@
 require "csv"
 require "hammer/refinement"
 
-using Hammer::Refinement
-
 module Hammer::Loader
   module CSV
     include Hammer::TypeCohersable
+    using Hammer::Refinement
 
     def load_csv(filename, extras: {})
       options = csv_extras_defaults.merge(extras)
 
       data, headers = parse_csv_content(filename, extras: options)
 
-      Hammer::Structure::Dataframe.new(data: data, column_names: headers)
+      build_dataframe(data: data, column_names: headers)
     end
 
     private
