@@ -3,7 +3,6 @@ require "hammer/type"
 require "hammer/type_cohersion"
 require "hammer/detector"
 require "hammer/loader"
-require "hammer/analyzer"
 require "hammer/structure"
 require "hammer/util"
 
@@ -12,6 +11,5 @@ module Hammer
 
   include Detector
   include Loader
-  include Analyzer
   include Structure
 end
