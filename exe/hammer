@@ -1,102 +1,32 @@
 #!/usr/bin/env ruby
 
+$LOAD_PATH.unshift("./lib")
+
 require "thor"
 require "hammer"
-require "erb"
-require "rainbow/refinement"
-require "hammer/refinement"
-
-using Rainbow
-using Hammer::Refinement
+require "hammer/cli"
 
 class HammerCLI < Thor
   include Hammer
+  include Hammer::CLI
 
   class_option :extras, type: :hash, default: {}
+  # Options supported by extras:
+  #  * worksheet_idx: the worrkbook sheet to analyze
   class_option :fullload, type: :boolean, default: false
   class_option :output, type: :string
 
   desc "inspect FILE", "Inspect a file and extract basic stats"
   option :stats, type: :boolean, default: false
   option :sample, type: :boolean, default: false
-  def inspect(file)
-    dataframe, file_format = detect_and_load file
-
-    print_property "File format", file_format
-    print_property("Number of records", dataframe.size) if extras.fetch("fullload", false)
-    dataframe.metadata.each{|k,v| print_property(k.titlecase, v)}
-    print_property "Properties", dataframe.columns.map{|p| "\n  - #{p.name} (#{p.type.yellow})"}.join
-
-    print_stats dataframe if options[:stats]
-    print_sample dataframe if options[:sample]
-  end
+  alias :inspect_aliased :inspect
 
   desc "template FILE TEMPLATE", "Process the template in the file"
-  def template(file, template_string)
-    dataframe, _ = detect_and_load file
-
-    template = ERB.new template_string
-    names = dataframe.column_names.map(&:to_sym)
-    dataframe.rows.each do |row|
-      ctx = Hash[names.zip(row)]
-      output.puts template.result_with_hash(ctx)
-    end
-  end
+  alias :template_aliased :template
 
   desc "interactive", "Executes a interactive session"
   option :file, type: :string
-  def interactive
-    require "pry"
-
-    unless options["file"].nil?
-      df, file_format = detect_and_load(options[:file])
-    end
-
-    Pry.start binding
-  end
-
-  no_commands {
-    def print_sample(dataframe)
-      print_property "Content sample"
-      dataframe.rows.take(5).each do |row|
-        output.puts row.join(" | ".yellow)
-      end
-    end
-
-    def print_stats(dataframe)
-      stats = dataframe.columns.each_with_object([]) do |col,acc|
-        stat = col.stats
-
-        unless stat.nil?
-          acc << "  #{col.name} (#{col.type.yellow})"
-          stat.each do |(k,v)|
-            acc << "    - #{k}: #{v.to_s.cyan}"
-          end
-        end
-      end
-
-      print_property "Stats", "\n" + stats.join("\n") unless stats.empty?
-    end
-
-    def output
-      @output ||= options[:output].nil? ? STDOUT : open(options[:output], "w")
-    end
-
-    def detect_and_load(file)
-      file_format = detect_format(file, extras: extras)
-      dataframe = loads(file_format, filename: file, extras: extras)
-
-      [dataframe, file_format]
-    end
-
-    def extras
-      @extras ||= options[:extras].merge("fullload" => options[:fullload])
-    end
-
-    def print_property(prop, value="")
-      output.puts "#{prop.red}: #{value.to_s}"
-    end
-  }
+  alias :interactive_aliased :interactive
 end
 
 HammerCLI.start(ARGV)

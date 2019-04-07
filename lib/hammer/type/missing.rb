@@ -11,11 +11,11 @@ module Hammer::Type
     end
 
     def inspect
-      to_s
+      "missing"
     end
 
     def to_s
-      "missing"
+      ""
     end
 
     def method_missing(mtd, *args)
