@@ -42,7 +42,7 @@ module Hammer::Loader
       header_types = data.first.map{|v| detect_type(v)}
       first_row_types = data[1].map{|v| detect_type(v)}
 
-      header_types != first_row_types ? data.shift : nil
+      header_types.map(&:name) != first_row_types.map(&:name) ? data.shift : nil
     end
   end
 end

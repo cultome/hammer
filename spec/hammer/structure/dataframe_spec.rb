@@ -18,9 +18,9 @@ RSpec.describe Hammer::Structure::Dataframe do
       end
 
       it "should report column type" do
-        expect(d.get_col("0").type).to eq "string"
-        expect(d.get_col("1").type).to eq "integer"
-        expect(d.get_col("2").type).to eq "string"
+        expect(d.get_col("0").type.name).to eq "string"
+        expect(d.get_col("1").type.name).to eq "integer"
+        expect(d.get_col("2").type.name).to eq "string"
       end
 
       it "should get_col columns by name" do

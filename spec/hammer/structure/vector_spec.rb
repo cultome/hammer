@@ -24,7 +24,7 @@ RSpec.describe Hammer::Structure::Vector do
       let(:v){ Vector.new(data: [1,"2",3.5,missing,5], name: "my mixed col", type: "integer") }
 
       it "should convert item to the given type" do
-        expect(v.type).to eq "integer"
+        expect(v.type.name).to eq "integer"
       end
     end
   end
@@ -41,7 +41,7 @@ RSpec.describe Hammer::Structure::Vector do
     it "detects a more general type" do
       v.push(value: "value", value_type: "string")
 
-      expect(v.type).to eq "string"
+      expect(v.type.name).to eq "string"
     end
 
     it "convert the whole vector to the more general type" do

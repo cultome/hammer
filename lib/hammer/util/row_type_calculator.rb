@@ -4,12 +4,19 @@ module Hammer::Util
       check_allocation(row_types.size)
 
       row_types.each_with_index do |type,idx|
-        @cols[idx][type] += 1
+        @cols[idx][type.serialize] += 1
       end
     end
 
     def detected_types
-      @cols.map{|col| col.max{|a,b| a[1] <=> b[1]}.first}
+      @cols
+        .map do |col|
+          col.max{|a,b| a[1] <=> b[1]}.first
+        end
+        .map do |serialized_type|
+          name, format, strict = serialized_type.split("~>")
+          data_type(name: name, format: format, strict: strict)
+        end
     end
 
     private

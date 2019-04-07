@@ -19,22 +19,28 @@ module Hammer::Structure
       if type.nil?
         @data = data
 
-        types = data.each_with_object(Set.new){|val,acc| acc.add(translate_class_to_type(val.class))}
+        types = data.each_with_object(Set.new) do |val,acc|
+          acc.add(translate_class_to_type(val.class))
+        end
         @type = more_general_type(types)
       else
-        @data = data.map{|e| coherse(e, type) }
-        @type, _ = type.split("|")
+        @type = type
+        @type = data_type(name: type) if type.is_a? String
+
+        @data = data.map{|e| coherse(e, @type) }
       end
 
       @name = name.to_s
     end
 
     def push(value:, value_type:)
+      value_type = data_type(name: value_type) if value_type.is_a? String
+
       data.push(coherse(value, value_type))
 
       new_type = more_general_type([value_type, type])
-      if new_type != type
-        puts "Change of vector type from [#{type}] to the more general [#{new_type}]"
+      if new_type.name != type.name
+        puts "Change of vector type from [#{type.to_s}] to the more general [#{new_type.to_s}]"
 
         @type = new_type
         @data = data.map{|v| coherse(v, new_type)}

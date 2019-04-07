@@ -12,7 +12,7 @@ RSpec.describe Hammer::Loader::XLSX do
     end
 
     it "the dataframe has the correct column type" do
-      expect(data.columns.map{|c| c.type}).to eq ["string", "float", "float"]
+      expect(data.columns.map{|c| c.type.name}).to eq ["string", "float", "float"]
     end
 
     it "the dataframe has the correct column names" do

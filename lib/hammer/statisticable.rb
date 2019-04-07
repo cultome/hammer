@@ -1,7 +1,7 @@
 
 module Hammer::Statisticable
   def stats
-    case type
+    case type.name
     when "integer" then numeric_stats
     when "float" then numeric_stats
     when "string" then string_stats
