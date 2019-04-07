@@ -31,16 +31,6 @@ module Hammer
       end
     end
 
-    def interactive
-      require "pry"
-
-      unless options["file"].nil?
-        df, file_format = detect_and_load(options[:file])
-      end
-
-      Pry.start binding
-    end
-
     private
 
     def print_sample(dataframe)

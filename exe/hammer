@@ -26,7 +26,15 @@ class HammerCLI < Thor
 
   desc "interactive", "Executes a interactive session"
   option :file, type: :string
-  alias :interactive_aliased :interactive
+  def interactive
+    require "pry"
+
+    unless options["file"].nil?
+      df, file_format = detect_and_load(options[:file])
+    end
+
+    Pry.start binding
+  end
 end
 
 HammerCLI.start(ARGV)
