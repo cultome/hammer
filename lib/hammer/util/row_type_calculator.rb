@@ -10,13 +10,12 @@ module Hammer::Util
 
     def detected_types
       @cols
-        .map do |col|
+        .map{|col|
           col.max{|a,b| a[1] <=> b[1]}.first
-        end
-        .map do |serialized_type|
+        }.map{|serialized_type|
           name, format, strict = serialized_type.split("~>")
           data_type(name: name, format: format, strict: strict)
-        end
+        }
     end
 
     private

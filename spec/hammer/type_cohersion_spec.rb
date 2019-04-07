@@ -83,14 +83,14 @@ RSpec.describe Hammer::TypeCohersable do
   end
 
   it "calculates the common denominator for a list of types" do
-    expect(more_general_type([data_type(name: "integer"), data_type(name: "integer")]).name).to eq "integer"
-    expect(more_general_type([data_type(name: "missing"), data_type(name: "missing")]).name).to eq "string"
-    expect(more_general_type([data_type(name: "missing"), data_type(name: "date_time")]).name).to eq "date_time"
-    expect(more_general_type([data_type(name: "integer"), data_type(name: "float")]).name).to eq "float"
-    expect(more_general_type([data_type(name: "time"), data_type(name: "date")]).name).to eq "date_time"
-    expect(more_general_type([data_type(name: "date"), data_type(name: "float")]).name).to eq "string"
-    expect(more_general_type([data_type(name: "date"), data_type(name: "float"), data_type(name: "missing")]).name).to eq "string"
-    expect(more_general_type([data_type(name: "integer"), data_type(name: "float"), data_type(name: "missing")]).name).to eq "float"
+    expect(more_general_type(["integer", "integer"]).name).to eq "integer"
+    expect(more_general_type(["missing", "missing"]).name).to eq "string"
+    expect(more_general_type(["missing", "date_time"]).name).to eq "date_time"
+    expect(more_general_type(["integer", "float"]).name).to eq "float"
+    expect(more_general_type(["time", "date"]).name).to eq "date_time"
+    expect(more_general_type(["date", "float"]).name).to eq "string"
+    expect(more_general_type(["date", "float", "missing"]).name).to eq "string"
+    expect(more_general_type(["integer", "float", "missing"]).name).to eq "float"
   end
 
   it "detect value format" do

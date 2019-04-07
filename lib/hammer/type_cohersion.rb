@@ -25,7 +25,9 @@ module Hammer::TypeCohersable
   end
 
   def more_general_type(types)
-    types.reduce{|t1,t2| common_super_type(t1,t2)}
+    types
+      .map{|t| t.is_a?(String) ? data_type(name: t) : t}
+      .reduce{|t1,t2| common_super_type(t1,t2)}
   end
 
   def common_super_type(t1, t2)
