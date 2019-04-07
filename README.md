@@ -16,10 +16,9 @@
   * Interactive mode to play with the data
 
 ## Working on right now
- * Agregar eventos al hammer
- * Que hammer trate de areglar los datos donde apliquen ("19" y "19 años")
- * Que hammer considere problemas basicos de encoding.
  * Que hammer considere un mapeo de catalogos cuando se carguen datos (1=femenino, 2=masculino)
+ * Agregar eventos al hammer
+ * Que hammer considere problemas basicos de encoding.
 
 ## License
 

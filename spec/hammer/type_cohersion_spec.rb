@@ -36,10 +36,22 @@ RSpec.describe Hammer::TypeCohersable do
     end
   end
 
+  context "coherse an date" do
+    it "a valid value" do
+      expect(coherse("2018-12-31", "date|%Y-%m-%d")).to eq Date.strptime("2018-12-31")
+    end
+  end
+
   context "coherse an integer" do
     it "a valid value" do
       expect(coherse("1", "integer")).to eq 1
       expect(coherse("1.5", "integer")).to eq 1
+      expect(coherse("20 años", "integer")).to eq 20
+      expect(coherse("20 ", "integer")).to eq 20
+      expect(coherse(" 20", "integer")).to eq 20
+      expect(coherse(" 20 ", "integer")).to eq 20
+      expect(coherse("otra 20", "integer")).to eq 20
+
       expect(coherse("1", "integer|strict")).to eq 1
 
       expect(coherse(1, "integer")).to eq 1

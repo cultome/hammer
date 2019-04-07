@@ -104,6 +104,6 @@ module Hammer::TypeCohersable
   end
 
   def coherse_relaxed_integer(value, args)
-    value.to_i
+    value.to_s.gsub(/[^0-9.]/, "").to_i
   end
 end
