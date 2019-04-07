@@ -28,7 +28,10 @@ module Hammer::TypeCohersable
     types.reduce{|t1,t2| common_super_type(t1,t2)}
   end
 
-  def common_super_type(t1, t2)
+  def common_super_type(type_1, type_2)
+    t1, _ = type_1.split("|")
+    t2, _ = type_2.split("|")
+
     super_type, _ = [
       ["string", ["missing", "string"]],
       ["float", ["missing", "float"]],

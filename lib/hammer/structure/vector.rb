@@ -23,7 +23,7 @@ module Hammer::Structure
         @type = more_general_type(types)
       else
         @data = data.map{|e| coherse(e, type) }
-        @type = type
+        @type, _ = type.split("|")
       end
 
       @name = name.to_s
@@ -34,6 +34,8 @@ module Hammer::Structure
 
       new_type = more_general_type([value_type, type])
       if new_type != type
+        puts "Change of vector type from [#{type}] to the more general [#{new_type}]"
+
         @type = new_type
         @data = data.map{|v| coherse(v, new_type)}
       end
