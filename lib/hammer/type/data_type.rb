@@ -12,7 +12,7 @@ module Hammer::Type
 
     def initialize(name, format, strict)
       @name = name
-      @format = format
+      @format = format || ""
       @strict = strict
     end
 
@@ -25,7 +25,7 @@ module Hammer::Type
     end
 
     def to_s
-      "#{@name}#{@format.nil? ? '' : " [#{@format}]"}#{@strict ? ' strict' : ''}"
+      "#{@name}#{@format.empty? ? '' : " [#{@format}]"}#{@strict ? ' strict' : ''}"
     end
   end
 end

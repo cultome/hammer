@@ -14,7 +14,7 @@ module Hammer
       print_property "File format", file_format
       print_property("Number of records", dataframe.size) if extras.fetch("fullload", false)
       dataframe.metadata.each{|k,v| print_property(k.titlecase, v)}
-      print_property "Properties", dataframe.columns.map{|p| "\n  - #{p.name} (#{p.type.yellow})"}.join
+      print_property "Properties", dataframe.columns.map{|p| "\n  - #{p.name} (#{p.type.to_s.yellow})"}.join
 
       print_stats dataframe if options[:stats]
       print_sample dataframe if options[:sample]
@@ -24,7 +24,7 @@ module Hammer
       dataframe, _ = detect_and_load file
 
       template = ERB.new template_string
-      names = dataframe.column_names.map(&:downcase).map(&:to_sym)
+      names = dataframe.column_names.map(&:downcase).map{|name| name.gsub(/[\s]/, "_")}.map(&:to_sym)
       dataframe.rows.each do |row|
         ctx = Hash[names.zip(row)]
         output.puts template.result_with_hash(ctx)
@@ -45,7 +45,7 @@ module Hammer
         stat = col.stats
 
         unless stat.nil?
-          acc << "  #{col.name} (#{col.type.yellow})"
+          acc << "  #{col.name} (#{col.type.to_s.yellow})"
           stat.each do |(k,v)|
             acc << "    - #{k}: #{v.to_s.cyan}"
           end

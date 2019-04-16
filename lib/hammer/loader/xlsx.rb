@@ -47,7 +47,7 @@ module Hammer::Loader
           break if idx >= extras.fetch("load_only", 10)
         end
 
-        row_data = worksheet[idx].cells.map{|col| col.value}
+        row_data = worksheet[idx].cells.map{|col| col.nil? ? nil : col.value}
         row_types = row_data.map{|value| detect_type(value.to_s)}
 
         data << row_data

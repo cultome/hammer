@@ -39,6 +39,6 @@ module Hammer::Detector
   end
 
   def is_xlsx_format?(fragment)
-    fragment.include?("[Content_Types].xml")
+    fragment.include?("[Content_Types].xml") || fragment.include?("workbook.xml.rels")
   end
 end

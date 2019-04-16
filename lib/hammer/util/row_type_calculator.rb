@@ -4,12 +4,15 @@ module Hammer::Util
       check_allocation(row_types.size)
 
       row_types.each_with_index do |type,idx|
-        @cols[idx][type.serialize] += 1
+        if cols[idx].nil?
+        require "pry";binding.pry
+        end
+        cols[idx][type.serialize] += 1
       end
     end
 
     def detected_types
-      @cols
+      cols
         .map{|col|
           col.max{|a,b| a[1] <=> b[1]}.first
         }.map{|serialized_type|
@@ -21,7 +24,15 @@ module Hammer::Util
     private
 
     def check_allocation(col_count)
-      @cols ||= Array.new(col_count){Hash.new{|h,k| h[k] = 0}}
+      return cols if cols.size >= col_count
+
+      (col_count - cols.size).times do
+        cols.push(Hash.new{|h,k| h[k] = 0})
+      end
+    end
+
+    def cols
+      @cols ||= []
     end
   end
 end
