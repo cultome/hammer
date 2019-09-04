@@ -5,11 +5,9 @@ RSpec.describe Hammer::Statisticable do
   it "calculate stats for integer" do
     stats = data.get_col("age").stats
 
-    expect(stats).to have_key :count
-    expect(stats).to have_key :sum
-    expect(stats).to have_key :max
-    expect(stats).to have_key :min
-    expect(stats).to have_key :avg
+    %I[count sum max invalid min avg median].each do |key|
+      expect(stats).to have_key key
+    end
   end
 
   it "calculate stats for date" do

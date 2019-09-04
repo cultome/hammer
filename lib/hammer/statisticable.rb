@@ -16,17 +16,20 @@ module Hammer
         count: Hash.new{|h,k| h[k] = 0},
         sum: 0,
         max: 0,
+        invalid: 0,
         min: 999999999,
       }
 
       list = []
       stats = data.each_with_object(hash) do |num,acc|
-        next if num.nil?
-
-        acc[:count][num] += 1
+        if num.nil?
+          acc[:invalid] += 1
+          next
+        end
 
         list << num
 
+        acc[:count][num] += 1
         acc[:sum] += num
         acc[:max] = num if acc[:max] < num
         acc[:min] = num if acc[:min] > num
@@ -35,9 +38,8 @@ module Hammer
       stats[:avg] = stats[:sum] / size
       stats[:median] = list.sort[list.size / 2]
 
-      if stats[:count].size > 10
-        stats.delete :count
-      end
+      stats.delete(:count) if stats[:count].size > 10
+      stats.delete(:invalid) if stats[:invalid].zero?
 
       stats
     end
