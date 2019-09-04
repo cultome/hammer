@@ -1,10 +1,20 @@
+require "csv"
+require "date"
+require "erb"
+require "forwardable"
+require "rainbow/refinement"
+require "rubyXL"
+require "set"
+
 require "hammer/version"
+require "hammer/detector"
 require "hammer/type"
 require "hammer/type_cohersion"
-require "hammer/detector"
-require "hammer/loader"
+require "hammer/refinement"
+require "hammer/statisticable"
 require "hammer/structure"
 require "hammer/util"
+require "hammer/loader"
 
 module Hammer
   class Error < StandardError; end

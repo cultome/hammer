@@ -1,21 +1,23 @@
-module Hammer::Type
-  def invalid
-    @@invalid ||= Invalid.new
-  end
-
-  private
-
-  class Invalid
-    def nil?
-      true
+module Hammer
+  module Type
+    def invalid
+      @@invalid ||= Invalid.new
     end
 
-    def inspect
-      to_s
-    end
+    private
 
-    def to_s
-      "invalid"
+    class Invalid
+      def nil?
+        true
+      end
+
+      def inspect
+        to_s
+      end
+
+      def to_s
+        "invalid"
+      end
     end
   end
 end

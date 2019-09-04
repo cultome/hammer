@@ -10,27 +10,27 @@ class HammerCLI < Thor
   include Hammer
   include Hammer::CLI
 
-  class_option :extras, type: :hash, default: {}
+  class_option :extras, type: :hash, default: {}, desc: "Extended options. Available: worksheet_idx"
   # Options supported by extras:
   #  * worksheet_idx: the worrkbook sheet to analyze
-  class_option :fullload, type: :boolean, default: false
-  class_option :output, type: :string
+  class_option :fullload, type: :boolean, default: false, desc: "Operate on the whole data, not only a sample (default)"
+  class_option :output, type: :string, desc: "File to write the output"
 
   desc "inspect FILE", "Inspect a file and extract basic stats"
-  option :stats, type: :boolean, default: false
-  option :sample, type: :boolean, default: false
+  option :stats, type: :boolean, default: false, desc: "Generates statistics from the data"
+  option :sample, type: :boolean, default: false, desc: "Returns some records from the file"
   alias :inspect_aliased :inspect
 
   desc "template FILE TEMPLATE", "Process the template in the file"
   alias :template_aliased :template
 
   desc "interactive", "Executes a interactive session"
-  option :file, type: :string
+  option :file, type: :string, desc: "The file to work with"
   def interactive
     require "pry"
 
     unless options["file"].nil?
-      df, file_format = detect_and_load(options[:file])
+      detect_and_load(options[:file])
     end
 
     Pry.start binding

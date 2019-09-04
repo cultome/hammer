@@ -1,31 +1,32 @@
-
-module Hammer::Type
-  def data_type(name:, format: nil, strict: false)
-    DataType.new(name, format, strict)
-  end
-
-  private
-
-  class DataType
-    attr_reader :name
-    attr_reader :format
-
-    def initialize(name, format, strict)
-      @name = name
-      @format = format || ""
-      @strict = strict
+module Hammer
+  module Type
+    def data_type(name:, format: nil, strict: false)
+      DataType.new(name, format, strict)
     end
 
-    def strict?
-      @strict
-    end
+    private
 
-    def serialize
-      "#{@name}~>#{@format}~>#{@strict}"
-    end
+    class DataType
+      attr_reader :name
+      attr_reader :format
 
-    def to_s
-      "#{@name}#{@format.empty? ? '' : " [#{@format}]"}#{@strict ? ' strict' : ''}"
+      def initialize(name, format, strict)
+        @name = name
+        @format = format || ""
+        @strict = strict
+      end
+
+      def strict?
+        @strict
+      end
+
+      def serialize
+        "#{@name}~>#{@format}~>#{@strict}"
+      end
+
+      def to_s
+        "#{@name}#{@format.empty? ? '' : " [#{@format}]"}#{@strict ? ' strict' : ''}"
+      end
     end
   end
 end

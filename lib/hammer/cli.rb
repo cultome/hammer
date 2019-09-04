@@ -1,10 +1,5 @@
-require "erb"
-require "rainbow/refinement"
-require "hammer/refinement"
-
 module Hammer
   module CLI
-
     using Rainbow
     using Hammer::Refinement
 

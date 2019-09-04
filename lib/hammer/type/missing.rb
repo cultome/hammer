@@ -1,25 +1,33 @@
-module Hammer::Type
-  def missing
-    @@missing ||= Missing.new
-  end
-
-  private
-
-  class Missing
-    def nil?
-      true
+module Hammer
+  module Type
+    def missing
+      @@missing ||= Missing.new
     end
 
-    def inspect
-      "missing"
-    end
+    private
 
-    def to_s
-      ""
-    end
+    class Missing
+      include Comparable
 
-    def method_missing(mtd, *args)
-      nil
+      def nil?
+        true
+      end
+
+      def inspect
+        "missing"
+      end
+
+      def to_s
+        ""
+      end
+
+      def method_missing(mtd, *args)
+        nil
+      end
+
+      def <=>(obj)
+        -1
+      end
     end
   end
 end
