@@ -9,21 +9,42 @@ module Hammer
       print_property "File format", file_format
       print_property("Number of records", dataframe.size) if extras.fetch("fullload", false)
       dataframe.metadata.each{|k,v| print_property(k.titlecase, v)}
-      print_property "Properties", dataframe.columns.map{|p| "\n  - #{p.name} (#{p.type.to_s.yellow})"}.join
+      print_property "Properties", dataframe.all_columns.map{|p| "\n  - #{p.name} (#{p.type.to_s.yellow})"}.join
 
       print_stats dataframe if options[:stats]
       print_sample dataframe if options[:sample]
     end
 
-    def template(file, template_string)
-      dataframe, _ = detect_and_load file
+    def template(template_string)
+      dataframe, _ = detect_and_load options[:file]
+      output.puts dataframe.format(template_string)
+    end
 
-      template = ERB.new template_string
-      names = dataframe.column_names.map(&:downcase).map{|name| name.gsub(/[\s]/, "_")}.map(&:to_sym)
-      dataframe.rows.each do |row|
-        ctx = Hash[names.zip(row)]
-        output.puts template.result_with_hash(ctx)
+    def plot(columns)
+      dataframe, _ = detect_and_load(options["file"])
+      template_string = columns.split(",").map{ |col| "<%= #{col} %>"}.join("\t")
+
+      file = Tempfile.new("plot")
+      file.write dataframe.format(template_string)
+
+      Numo.gnuplot do
+        define_singleton_method :refresh do
+          plot "'#{file.path}'"
+        end
+
+        set :nokey
+        refresh
+
+        binding.pry
+        # type exit to terminate
       end
+    end
+
+    def interactive
+      dataframe, file_format = detect_and_load(options["file"]) unless options["file"].nil?
+      clean_room = Hammer::CleanRoom.new(dataframe, file_format)
+
+      Pry.start clean_room
     end
 
     private
@@ -36,7 +57,7 @@ module Hammer
     end
 
     def print_stats(dataframe)
-      stats = dataframe.columns.each_with_object([]) do |col,acc|
+      stats = dataframe.all_columns.each_with_object([]) do |col,acc|
         stat = col.stats
 
         unless stat.nil?

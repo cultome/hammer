@@ -12,11 +12,11 @@ RSpec.describe Hammer::Loader::XLSX do
     end
 
     it "the dataframe has the correct column type" do
-      expect(data.columns.map{|c| c.type.name}).to eq ["string", "float", "float"]
+      expect(data.all_columns.map{|c| c.type.name}).to eq ["string", "float", "float"]
     end
 
     it "the dataframe has the correct column names" do
-      expect(data.columns.map{|c| c.name}).to eq ["ID", "Latitud", "Longitud"]
+      expect(data.all_columns.map{|c| c.name}).to eq ["ID", "Latitud", "Longitud"]
     end
 
     it "stores metadata in dataframe"

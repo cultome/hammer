@@ -3,6 +3,8 @@ PATH
   specs:
     hammer (0.1.0)
       iconv (~> 1.0)
+      numo-gnuplot (~> 0.2.4)
+      pry (~> 0.12.2)
       rainbow (~> 3.0)
       rubyXL (~> 3.4)
       simplecov (~> 0.16.1)
@@ -19,6 +21,7 @@ GEM
     mini_portile2 (2.4.0)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
+    numo-gnuplot (0.2.4)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -53,7 +56,6 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 2.0)
   hammer!
-  pry (~> 0.12.2)
   rake (~> 10.0)
   rspec (~> 3.0)
 

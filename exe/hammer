@@ -21,20 +21,17 @@ class HammerCLI < Thor
   option :sample, type: :boolean, default: false, desc: "Returns some records from the file"
   alias :inspect_aliased :inspect
 
-  desc "template FILE TEMPLATE", "Process the template in the file"
+  desc "template TEMPLATE", "Process the template in the file"
+  option :file, required: true, type: :string, desc: "The file to work with"
   alias :template_aliased :template
 
   desc "interactive", "Executes a interactive session"
   option :file, type: :string, desc: "The file to work with"
-  def interactive
-    require "pry"
+  alias :interactive_aliased :interactive
 
-    unless options["file"].nil?
-      detect_and_load(options[:file])
-    end
-
-    Pry.start binding
-  end
+  desc "plot COLUMNS", "Creates a plot of the given columns (comma-separed-values)"
+  option :file, required: true, type: :string, desc: "The file to work with"
+  alias :plot_aliased :plot
 end
 
 HammerCLI.start(ARGV)

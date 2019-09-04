@@ -14,21 +14,21 @@ RSpec.describe Hammer::Structure::Dataframe do
       }
 
       it "should report columns count" do
-        expect(d.columns.size).to eq 3
+        expect(d.all_columns.size).to eq 3
       end
 
       it "should report column type" do
-        expect(d.get_col("0").type.name).to eq "string"
-        expect(d.get_col("1").type.name).to eq "integer"
-        expect(d.get_col("2").type.name).to eq "string"
+        expect(d.column("0").type.name).to eq "string"
+        expect(d.column("1").type.name).to eq "integer"
+        expect(d.column("2").type.name).to eq "string"
       end
 
-      it "should get_col columns by name" do
-        expect(d.get_col("0")).to be_a Vector
+      it "should get column by name" do
+        expect(d.column("0")).to be_a Vector
       end
 
-      it "should get_col correct columns values" do
-        expect(d.get_col("0").data).to eq [
+      it "should get correct columns values" do
+        expect(d.column("0").data).to eq [
           "Carlos Estevez",
           "Romero Alvarado",
           "Saul Estevez",
@@ -86,6 +86,37 @@ RSpec.describe Hammer::Structure::Dataframe do
       }
 
       it "should report correct column types"
+    end
+
+    context "from another dataframe" do
+      let(:d){
+        Dataframe.new(
+          data: [
+            ["Carlos Estevez",35,"30-06-1985"],
+            ["Romero Alvarado",12,"02-10-1990"],
+            ["Saul Estevez",9,"01-03-2010"],
+            [missing,10,"01-02-2003"],
+            ["Erin Raimer",missing,"01-01-2019"],
+            ["Sacha Petricor",5,missing],
+          ],
+          column_names: [
+            "name",
+            "age",
+            "birthday",
+          ],
+          column_types: [
+            String,
+            Integer,
+            Date,
+          ]
+        )
+      }
+
+      it "using pluck" do
+        d2 = d.pluck("name", "age")
+
+        expect(d2.column_names).to eq ["name", "age"]
+      end
     end
 
     context "with metadata" do
