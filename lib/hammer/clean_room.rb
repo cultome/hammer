@@ -1,5 +1,7 @@
 module Hammer
   class CleanRoom
+    include Hammer
+
     attr_reader :dataframe
     attr_reader :file_format
 

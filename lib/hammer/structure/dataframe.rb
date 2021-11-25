@@ -1,7 +1,7 @@
 module Hammer
   module Structure
-    def build_dataframe(*args)
-      Dataframe.new(*args)
+    def build_dataframe(**args)
+      Dataframe.new(**args)
     end
 
     class Dataframe
