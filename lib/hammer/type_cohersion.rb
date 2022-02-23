@@ -11,7 +11,7 @@ module Hammer
 
       send("coherse_#{dest_type.name}", value, dest_type)
     rescue Exception
-      return invalid
+      invalid
     end
 
     def translate_class_to_type(clazz)
@@ -24,12 +24,17 @@ module Hammer
     end
 
     def more_general_type(types)
-      types
-        .map{|t| t.is_a?(String) ? data_type(name: t) : t}
-        .reduce{|t1,t2| common_super_type(t1,t2)}
+      types.
+        map { |t| t.is_a?(String) ? data_type(name: t) : t }.
+        reduce { |t1, t2| common_super_type(t1, t2) }
     end
 
     def common_super_type(t1, t2)
+      return t1 if t1.name == t2.name
+
+      return t2 if ['missing', 'invalid'].include?(t1.name)
+      return t1 if ['missing', 'invalid'].include?(t2.name)
+
       super_type, _ = [
         ["string", ["missing", "string"]],
         ["float", ["missing", "float"]],
@@ -48,7 +53,8 @@ module Hammer
         ["string", ["date", "string"]],
         ["string", ["time", "string"]],
       ].find do |(_, classes)|
-        classes.include?(t1.name) && classes.include?(t2.name)
+        (classes.first == t1.name && classes.last == t2.name) ||
+        (classes.first == t2.name && classes.last == t1.name)
       end
 
       return data_type(name: "string") if super_type.nil?

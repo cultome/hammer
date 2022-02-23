@@ -22,8 +22,8 @@ module Hammer
         @metadata = metadata
         @vectors = {}
 
-        data.each_with_index do |this_row,ridx|
-          this_row.each_with_index do |col_value,cidx|
+        data.each_with_index do |this_row, ridx|
+          this_row.each_with_index do |col_value, cidx|
             col_name = column_name(column_names, cidx)
             col_type = column_type(column_types, cidx, col_value)
 
@@ -37,9 +37,9 @@ module Hammer
       end
 
       def pluck(*names)
-        vectors = all_columns
-          .select { |col| names.include? col.name }
-          .each_with_object({}) { |col, acc| acc[col.name] = col }
+        vectors = all_columns.
+          select { |col| names.include? col.name }.
+          each_with_object({}) { |col, acc| acc[col.name] = col }
 
         self.class.new(vectors: vectors)
       end
@@ -49,7 +49,7 @@ module Hammer
       end
 
       def row(idx)
-        @vectors.values.map{|v| v[idx]}
+        @vectors.values.map { |v| v[idx] }
       end
 
       def [](idx)
@@ -74,7 +74,7 @@ module Hammer
 
       def rows
         Enumerator.new do |y|
-          0.upto(@vectors.values.first.size-1) do |idx|
+          0.upto(@vectors.values.first.size - 1) do |idx|
             this_row = row(idx)
             y << this_row
           end
@@ -84,7 +84,7 @@ module Hammer
       def format(template_string)
         template = ERB.new template_string
 
-        names = column_names.map(&:downcase).map{|name| name.gsub(/[\s]/, "_")}.map(&:to_sym)
+        names = column_names.map(&:downcase).map { |name| name.gsub(/[\s]/, "_") }.map(&:to_sym)
 
         rows.map do |row|
           ctx = Hash[names.zip(row)]
@@ -103,11 +103,13 @@ module Hammer
       end
 
       def column_name(column_names, idx)
-        if column_names.nil?
-          idx.to_s
-        else
-          column_names[idx].to_s
-        end
+        name = if column_names.nil?
+                 idx.to_s
+               else
+                 column_names[idx].to_s
+               end
+
+        name == '' ? '_noname_' : name.tr('áéíóúÁÉÍÓÚ', 'aeiouAEIOU').gsub(/[\W]+/, '_')
       end
     end
   end

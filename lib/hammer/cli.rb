@@ -8,8 +8,8 @@ module Hammer
 
       print_property "File format", file_format
       print_property("Number of records", dataframe.size) if extras.fetch("fullload", false)
-      dataframe.metadata.each{|k,v| print_property(k.titlecase, v)}
-      print_property "Properties", dataframe.all_columns.map{|p| "\n  - #{p.name} (#{p.type.to_s.yellow})"}.join
+      dataframe.metadata.each { |k, v| print_property(k.titlecase, v) }
+      print_property "Properties", dataframe.all_columns.map { |p| "\n  - #{p.name} (#{p.type.to_s.yellow})" }.join
 
       print_stats dataframe if options[:stats]
       print_sample dataframe if options[:sample]
@@ -22,7 +22,7 @@ module Hammer
 
     def plot(columns)
       dataframe, _ = detect_and_load(options["file"])
-      template_string = columns.split(",").map{ |col| "<%= #{col} %>"}.join("\t")
+      template_string = columns.split(",").map { |col| "<%= #{col} %>" }.join("\t")
 
       file = Tempfile.new("plot")
       file.write dataframe.format(template_string)
@@ -57,12 +57,12 @@ module Hammer
     end
 
     def print_stats(dataframe)
-      stats = dataframe.all_columns.each_with_object([]) do |col,acc|
+      stats = dataframe.all_columns.each_with_object([]) do |col, acc|
         stat = col.stats
 
         unless stat.nil?
           acc << "  #{col.name} (#{col.type.to_s.yellow})"
-          stat.each do |(k,v)|
+          stat.each do |(k, v)|
             acc << "    - #{k}: #{v.to_s.cyan}"
           end
         end
@@ -86,8 +86,8 @@ module Hammer
       @extras ||= options[:extras].merge("fullload" => options[:fullload])
     end
 
-    def print_property(prop, value="")
-      output.puts "#{prop.red}: #{value.to_s}"
+    def print_property(prop, value = "")
+      output.puts "#{prop.red}: #{value}"
     end
   end
 end

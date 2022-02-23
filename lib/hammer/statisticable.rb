@@ -13,7 +13,7 @@ module Hammer
 
     def numeric_stats
       hash = {
-        count: Hash.new{|h,k| h[k] = 0},
+        count: Hash.new { |h, k| h[k] = 0 },
         sum: 0,
         max: 0,
         invalid: 0,
@@ -21,7 +21,7 @@ module Hammer
       }
 
       list = []
-      stats = data.each_with_object(hash) do |num,acc|
+      stats = data.each_with_object(hash) do |num, acc|
         if num.nil?
           acc[:invalid] += 1
           next
@@ -45,6 +45,14 @@ module Hammer
     end
 
     def string_stats
+      return if data.uniq.size > data.size * 0.1
+
+      hash = Hash.new { |h, k| h[k] = 0 }
+      stats = data.each_with_object(hash) do |val, acc|
+        hash[val] += 1
+      end
+
+      Hash[stats.sort_by { |k, v| v }.reverse]
     end
 
     def date_stats
@@ -53,7 +61,7 @@ module Hammer
         min: 9999999999,
       }
 
-      stats = data.each_with_object(hash) do |date,acc|
+      stats = data.each_with_object(hash) do |date, acc|
         unless date.nil?
           date_num = date.to_time.to_i
 

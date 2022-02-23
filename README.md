@@ -61,7 +61,7 @@ $ cat some/other.txt
   - [ ] Validate records, including cross validations between records
   - [ ] Transform formats and types of records
   - [ ] Handle errors gracefuly to prevent the process to break and start all over again
-  - [ ] To have middleware-like featue to calculate metrics, log messages or apply reductions
+  - [ ] To have middleware-like feature to calculate metrics, log messages or apply reductions
   - [ ] Resolvers to navigate a relationship in the datasource and bring an associated values given an ID
   - [ ] DRY run to return the "execution plan" but not execute anything
   - [ ] Have events hooks
